@@ -16,9 +16,9 @@ import com.ivanmagda.popularmovies.network.Webservice;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MoviesListActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MoviesListActivity.class.getSimpleName();
 
     private enum SortOrder {
         MOST_POPULAR,

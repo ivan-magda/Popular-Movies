@@ -4,14 +4,15 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ivanmagda.popularmovies.utilities.MovieJsonUtils;
+import com.ivanmagda.popularmovies.model.Movie;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 public final class TMDbApi {
 
@@ -20,7 +21,9 @@ public final class TMDbApi {
     private static final String API_SCHEME = "https";
     private static final String API_HOST = "api.themoviedb.org";
     private static final String API_PATH = "3";
-    private static final String API_KEY = "REPLACE_WITH_YOUR_API_KEY";
+    private static final String API_KEY = "f63eb3a300d26ef9e8a067996c92c4a5";
+    private static final String POPULAR_MOVIES_PATH = "movie/popular";
+    private static final String TOP_RATED_MOVIES_PATH = "movie/top_rated";
 
     public static final String API_KEY_PARAM = "api_key";
     public static final String LANGUAGE_PARAM = "language";
@@ -32,27 +35,33 @@ public final class TMDbApi {
     /**
      * @return The popular movies Resource.
      */
-    public static Resource<String> getPopularMovies() {
-        URL url = buildUrl("movie/popular", getDefaultMethodParameters());
-        return new Resource<>(url, new Resource.Parse<String>() {
-            @Override
-            public String parse(String response) {
-                return response;
-            }
-        });
+    public static Resource<Movie[]> getPopularMovies() {
+        URL url = buildUrl(POPULAR_MOVIES_PATH, getDefaultMethodParameters());
+        return new Resource<>(
+                url,
+                new Resource.Parse<Movie[]>() {
+                    @Override
+                    public Movie[] parse(String response) {
+                        return MovieJsonUtils.buildMoviesFromResponse(response);
+                    }
+                }
+        );
     }
 
     /**
      * @return The top rated movies resource.
      */
-    public static Resource<String> getTopRatedMovies() {
-        URL url = buildUrl("movie/top_rated", getDefaultMethodParameters());
-        return new Resource<>(url, new Resource.Parse<String>() {
-            @Override
-            public String parse(String response) {
-                return response;
-            }
-        });
+    public static Resource<Movie[]> getTopRatedMovies() {
+        URL url = buildUrl(TOP_RATED_MOVIES_PATH, getDefaultMethodParameters());
+        return new Resource<>(
+                url,
+                new Resource.Parse<Movie[]>() {
+                    @Override
+                    public Movie[] parse(String response) {
+                        return MovieJsonUtils.buildMoviesFromResponse(response);
+                    }
+                }
+        );
     }
 
     /**
@@ -97,7 +106,7 @@ public final class TMDbApi {
             e.printStackTrace();
         }
 
-        Log.d(TAG, "Built URL: " + url);
+        Log.d(LOG_TAG, "TMDb URL: " + url);
 
         return url;
     }

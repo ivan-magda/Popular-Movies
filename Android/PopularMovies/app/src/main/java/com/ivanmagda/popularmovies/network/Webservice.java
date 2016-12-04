@@ -28,6 +28,10 @@ public final class Webservice {
         HttpURLConnection connection = null;
         URL url = resource.url;
 
+        if (url == null) {
+            return null;
+        }
+
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(10000);
@@ -54,7 +58,7 @@ public final class Webservice {
         try {
             // Did we receive a successful 2XX status code.
             int responseCode = connection.getResponseCode();
-            if (responseCode < 200 || responseCode > 299) {
+            if (responseCode < HttpURLConnection.HTTP_OK || responseCode > 299) {
                 Log.w(LOG_TAG, "Received status code other then 2XX, status code: " + responseCode);
                 return null;
             }

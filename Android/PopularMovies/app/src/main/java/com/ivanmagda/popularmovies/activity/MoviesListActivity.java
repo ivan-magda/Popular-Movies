@@ -1,15 +1,19 @@
 package com.ivanmagda.popularmovies.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.ivanmagda.popularmovies.model.MovieAdapter;
+import com.ivanmagda.popularmovies.Extras;
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.model.MovieAdapter;
 import com.ivanmagda.popularmovies.network.Resource;
 import com.ivanmagda.popularmovies.network.TMDbApi;
 import com.ivanmagda.popularmovies.network.Webservice;
@@ -71,6 +75,12 @@ public class MoviesListActivity extends AppCompatActivity {
         mGridView = (GridView) findViewById(R.id.gv_movies);
         mMovieAdapter = new MovieAdapter(this);
         mGridView.setAdapter(mMovieAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showDetails(mMovieAdapter.getItem(i));
+            }
+        });
     }
 
     private void fetchMovies() {
@@ -82,6 +92,12 @@ public class MoviesListActivity extends AppCompatActivity {
                 new FetchMoviesTask().execute(TMDbApi.getTopRatedMovies());
                 break;
         }
+    }
+
+    private void showDetails(Movie movie) {
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(Extras.EXTRA_MOVIE_TRANSFER, movie);
+        startActivity(intent);
     }
 
     private class FetchMoviesTask extends AsyncTask<Resource<Movie[]>, Void, Movie[]> {

@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Theme of the detail -->
+    <style name="DetailTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/detailColorPrimary</item>
+        <item name="colorPrimaryDark">@color/detailColorPrimaryDark</item>
+        <item name="colorAccent">@color/detailColorAscent</item>
+    </style>
+
     <style name="MoviesGridView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -16,6 +23,29 @@
         <item name="android:numColumns">auto_fit</item>
         <item name="android:stretchMode">columnWidth</item>
         <item name="android:verticalSpacing">0dp</item>
+    </style>
+
+    <style name="MovieTitleTextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/default_padding</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="JustifyTextView">
+        <item name="android:gravity">left|right</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="DefaultMovieTextView">
+
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/default_margin</item>
     </style>
 
 </resources>

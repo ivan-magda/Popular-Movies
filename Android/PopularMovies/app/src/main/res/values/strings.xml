@@ -1,5 +1,12 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <!--Activity and app specific.-->
+    <string name="app_name">Popular Movies</string>
+    <string name="activity_detail_title">Detail</string>
+
+    <!--Menu items names.-->
     <string name="action_most_popular_name">Most Popular</string>
     <string name="action_top_rated_name">Top Rated</string>
+    <string name="rating_name">"Rating: "</string>
+    <string name="release_year_name">"Release year: "</string>
+
 </resources>

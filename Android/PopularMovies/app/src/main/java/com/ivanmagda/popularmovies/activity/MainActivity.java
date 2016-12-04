@@ -3,6 +3,8 @@ package com.ivanmagda.popularmovies.activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.GridView;
 
 import com.ivanmagda.popularmovies.MovieAdapter;
@@ -18,8 +20,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    private enum SortOrder {
+        MOST_POPULAR,
+        TOP_RATED
+    }
+
     private GridView mGridView;
     private MovieAdapter mMovieAdapter;
+
+    private SortOrder mSortOrder = SortOrder.MOST_POPULAR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +36,52 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         configure();
-        new FetchMoviesTask().execute(TMDbApi.getPopularMovies());
+        fetchMovies();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        SortOrder currentSortOrder = mSortOrder;
+
+        switch (item.getItemId()) {
+            case R.id.action_by_popularity:
+                mSortOrder = SortOrder.MOST_POPULAR;
+                break;
+            case R.id.action_by_rating:
+                mSortOrder = SortOrder.TOP_RATED;
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        if (currentSortOrder != mSortOrder) {
+            fetchMovies();
+        }
+
+        return true;
     }
 
     private void configure() {
         mGridView = (GridView) findViewById(R.id.gv_movies);
         mMovieAdapter = new MovieAdapter(this);
         mGridView.setAdapter(mMovieAdapter);
+    }
+
+    private void fetchMovies() {
+        switch (mSortOrder) {
+            case MOST_POPULAR:
+                new FetchMoviesTask().execute(TMDbApi.getPopularMovies());
+                break;
+            case TOP_RATED:
+                new FetchMoviesTask().execute(TMDbApi.getTopRatedMovies());
+                break;
+        }
     }
 
     private class FetchMoviesTask extends AsyncTask<Resource<Movie[]>, Void, Movie[]> {

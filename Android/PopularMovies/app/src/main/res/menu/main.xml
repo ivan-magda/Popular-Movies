@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_by_popularity"
+        android:title="@string/action_most_popular_name" />
+    <item
+        android:id="@+id/action_by_rating"
+        android:title="@string/action_top_rated_name" />
+</menu>

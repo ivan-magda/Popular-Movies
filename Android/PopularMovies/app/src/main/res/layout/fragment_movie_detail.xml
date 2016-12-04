@@ -1,0 +1,58 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ivanmagda.popularmovies.view.fragment.MovieDetailFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_detail_movie_title"
+            style="@style/MovieTitleTextView"
+            tools:text="Chappie" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="4">
+
+            <ImageView
+                android:id="@+id/iv_detail_movie_poster"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/iv_poster_height"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_weight="2"
+                android:scaleType="fitCenter" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_detail_movie_release_date"
+                    style="@style/DefaultMovieTextView"
+                    tools:text="Release Date" />
+
+                <TextView
+                    android:id="@+id/tv_detail_movie_rating"
+                    style="@style/DefaultMovieTextView"
+                    android:layout_marginTop="4dp"
+                    tools:text="Rating" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_detail_movie_overview"
+            style="@style/JustifyTextView"
+            android:padding="@dimen/default_padding"
+            android:textSize="18sp"
+            tools:text="Overview" />
+    </LinearLayout>
+
+</FrameLayout>

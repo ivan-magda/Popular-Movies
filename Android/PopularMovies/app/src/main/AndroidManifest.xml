@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.MoviesListActivity">
+        <activity android:name=".view.activity.MoviesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,13 +20,13 @@
         </activity>
 
         <activity
-            android:name=".activity.MovieDetailActivity"
-            android:parentActivityName=".activity.MoviesListActivity"
+            android:name=".view.activity.MovieDetailActivity"
+            android:parentActivityName=".view.activity.MoviesListActivity"
             android:theme="@style/DetailTheme">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MoviesListActivity" />
+                android:value=".view.activity.MoviesListActivity" />
         </activity>
     </application>
 

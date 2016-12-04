@@ -9,4 +9,7 @@
     <string name="rating_name">"Rating: "</string>
     <string name="release_year_name">"Release year: "</string>
 
+    <string name="popular_bar_title">Popular Movies</string>
+    <string name="top_rated_bar_title">Top Rated</string>
+
 </resources>

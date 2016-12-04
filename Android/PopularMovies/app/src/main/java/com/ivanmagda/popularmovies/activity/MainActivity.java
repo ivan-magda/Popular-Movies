@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Movie[] movies) {
             super.onPostExecute(movies);
             Log.d(LOG_TAG, "Fetched movie sample: \n" + movies[0]);
+            Log.d(LOG_TAG, "Poster URL: \n" + TMDbApi.buildPosterUrlForMovie(movies[0]));
         }
     }
 }

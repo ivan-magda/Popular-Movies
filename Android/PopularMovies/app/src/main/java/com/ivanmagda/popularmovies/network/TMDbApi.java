@@ -4,8 +4,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ivanmagda.popularmovies.utilities.MovieJsonUtils;
 import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.utilities.MovieJsonUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -18,13 +18,15 @@ public final class TMDbApi {
 
     private static final String LOG_TAG = TMDbApi.class.getSimpleName();
 
+    private static final String API_KEY = "REPLACE_WITH_YOUR_OWN_API_KEY";
     private static final String API_SCHEME = "https";
     private static final String API_HOST = "api.themoviedb.org";
+    private static final String IMAGE_API_HOST = "image.tmdb.org";
     private static final String API_PATH = "3";
-    private static final String API_KEY = "f63eb3a300d26ef9e8a067996c92c4a5";
+    private static final String IMAGE_API_PATH = "t/p";
+    private static final String DEFAULT_POSTER_SIZE = "w185";
     private static final String POPULAR_MOVIES_PATH = "movie/popular";
     private static final String TOP_RATED_MOVIES_PATH = "movie/top_rated";
-
     public static final String API_KEY_PARAM = "api_key";
     public static final String LANGUAGE_PARAM = "language";
     public static final String PAGE_PARAM = "page";
@@ -64,6 +66,20 @@ public final class TMDbApi {
         );
     }
 
+    public static URL buildPosterUrlForMovie(Movie movie) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(API_SCHEME)
+                .authority(IMAGE_API_HOST)
+                .appendPath(IMAGE_API_PATH)
+                .appendPath(DEFAULT_POSTER_SIZE);
+
+        if (!TextUtils.isEmpty(movie.getPosterPath())) {
+            builder.appendPath(movie.getPosterPath());
+        }
+
+        return urlFormBuilder(builder);
+    }
+
     /**
      * @return The default http method parameters.
      */
@@ -98,6 +114,13 @@ public final class TMDbApi {
             }
         }
 
+        URL url = urlFormBuilder(builder);
+        Log.d(LOG_TAG, "TMDb URL: " + url);
+
+        return url;
+    }
+
+    private static URL urlFormBuilder(Uri.Builder builder) {
         URL url = null;
         try {
             String urlString = builder.build().toString();
@@ -105,9 +128,6 @@ public final class TMDbApi {
         } catch (MalformedURLException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-        Log.d(LOG_TAG, "TMDb URL: " + url);
-
         return url;
     }
 }

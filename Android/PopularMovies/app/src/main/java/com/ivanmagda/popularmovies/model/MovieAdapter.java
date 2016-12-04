@@ -1,4 +1,4 @@
-package com.ivanmagda.popularmovies;
+package com.ivanmagda.popularmovies.model;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.network.TMDbApi;
 import com.squareup.picasso.Picasso;
 

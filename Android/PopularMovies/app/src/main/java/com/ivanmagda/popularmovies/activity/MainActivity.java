@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
-import com.ivanmagda.popularmovies.MovieAdapter;
+import com.ivanmagda.popularmovies.model.MovieAdapter;
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.model.Movie;
 import com.ivanmagda.popularmovies.network.Resource;

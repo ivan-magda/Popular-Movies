@@ -18,6 +18,7 @@ public final class TMDbApi {
 
     private static final String LOG_TAG = TMDbApi.class.getSimpleName();
 
+    // TODO: Replace TMDb API Key with your own.
     private static final String API_KEY = "REPLACE_WITH_YOUR_OWN_API_KEY";
     private static final String API_SCHEME = "https";
     private static final String API_HOST = "api.themoviedb.org";

@@ -14,7 +14,11 @@
 		7500A1321DF57CAE00B17251 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7500A1301DF57CAE00B17251 /* LaunchScreen.storyboard */; };
 		7500A13D1DF57CAE00B17251 /* PopularMoviesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7500A13C1DF57CAE00B17251 /* PopularMoviesTests.swift */; };
 		7500A1481DF57CAE00B17251 /* PopularMoviesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7500A1471DF57CAE00B17251 /* PopularMoviesUITests.swift */; };
-		7500A1631DF57E1A00B17251 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7500A1601DF57E0400B17251 /* Network.framework */; };
+		75244A901DF582E5006A3496 /* TMDbConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75244A8F1DF582E5006A3496 /* TMDbConfig.swift */; };
+		75244A921DF586B4006A3496 /* TMDbConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75244A911DF586B4006A3496 /* TMDbConstants.swift */; };
+		75244A951DF58BED006A3496 /* TMDbWebservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75244A941DF58BED006A3496 /* TMDbWebservice.swift */; };
+		752B37FE1DF59AD900075D8B /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7500A1601DF57E0400B17251 /* Network.framework */; };
+		752B37FF1DF59AD900075D8B /* Network.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7500A1601DF57E0400B17251 /* Network.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +50,28 @@
 			remoteGlobalIDString = 7550EF631DEBD1D00006E458;
 			remoteInfo = NetworkTests;
 		};
+		752B38001DF59AD900075D8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7500A15A1DF57E0400B17251 /* Network.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7550EF591DEBD1D00006E458;
+			remoteInfo = Network;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		752B38021DF59ADA00075D8B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				752B37FF1DF59AD900075D8B /* Network.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7500A1241DF57CAD00B17251 /* PopularMovies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopularMovies.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +88,9 @@
 		7500A1471DF57CAE00B17251 /* PopularMoviesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularMoviesUITests.swift; sourceTree = "<group>"; };
 		7500A1491DF57CAE00B17251 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7500A15A1DF57E0400B17251 /* Network.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Network.xcodeproj; path = Network/Network.xcodeproj; sourceTree = "<group>"; };
+		75244A8F1DF582E5006A3496 /* TMDbConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDbConfig.swift; sourceTree = "<group>"; };
+		75244A911DF586B4006A3496 /* TMDbConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDbConstants.swift; sourceTree = "<group>"; };
+		75244A941DF58BED006A3496 /* TMDbWebservice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDbWebservice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7500A1631DF57E1A00B17251 /* Network.framework in Frameworks */,
+				752B37FE1DF59AD900075D8B /* Network.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +143,8 @@
 		7500A1261DF57CAD00B17251 /* PopularMovies */ = {
 			isa = PBXGroup;
 			children = (
-				7500A1551DF57D5B00B17251 /* AppDelegate */,
+				7500A1551DF57D5B00B17251 /* App */,
+				75244A931DF58708006A3496 /* API */,
 				7500A1561DF57D6900B17251 /* View */,
 				7500A1591DF57DA000B17251 /* Assets */,
 				7500A1581DF57D8500B17251 /* Supporting FIles */,
@@ -141,12 +170,12 @@
 			path = PopularMoviesUITests;
 			sourceTree = "<group>";
 		};
-		7500A1551DF57D5B00B17251 /* AppDelegate */ = {
+		7500A1551DF57D5B00B17251 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				7500A1271DF57CAD00B17251 /* AppDelegate.swift */,
 			);
-			name = AppDelegate;
+			name = App;
 			sourceTree = "<group>";
 		};
 		7500A1561DF57D6900B17251 /* View */ = {
@@ -192,6 +221,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		75244A931DF58708006A3496 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				75244A941DF58BED006A3496 /* TMDbWebservice.swift */,
+				75244A8F1DF582E5006A3496 /* TMDbConfig.swift */,
+				75244A911DF586B4006A3496 /* TMDbConstants.swift */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -202,10 +241,12 @@
 				7500A1201DF57CAD00B17251 /* Sources */,
 				7500A1211DF57CAD00B17251 /* Frameworks */,
 				7500A1221DF57CAD00B17251 /* Resources */,
+				752B38021DF59ADA00075D8B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				752B38011DF59AD900075D8B /* PBXTargetDependency */,
 			);
 			name = PopularMovies;
 			productName = PopularMovies;
@@ -352,8 +393,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75244A951DF58BED006A3496 /* TMDbWebservice.swift in Sources */,
 				7500A12A1DF57CAE00B17251 /* ViewController.swift in Sources */,
+				75244A901DF582E5006A3496 /* TMDbConfig.swift in Sources */,
 				7500A1281DF57CAE00B17251 /* AppDelegate.swift in Sources */,
+				75244A921DF586B4006A3496 /* TMDbConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +429,11 @@
 			isa = PBXTargetDependency;
 			target = 7500A1231DF57CAD00B17251 /* PopularMovies */;
 			targetProxy = 7500A1441DF57CAE00B17251 /* PBXContainerItemProxy */;
+		};
+		752B38011DF59AD900075D8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Network;
+			targetProxy = 752B38001DF59AD900075D8B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -504,6 +553,7 @@
 		7500A14D1DF57CAE00B17251 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6UNHY8UY6E;
 				INFOPLIST_FILE = PopularMovies/Info.plist;
@@ -518,6 +568,7 @@
 		7500A14E1DF57CAE00B17251 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6UNHY8UY6E;
 				INFOPLIST_FILE = PopularMovies/Info.plist;

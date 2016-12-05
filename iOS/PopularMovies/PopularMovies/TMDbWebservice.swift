@@ -20,52 +20,44 @@
  * THE SOFTWARE.
  */
 
-import UIKit
+import Foundation
 import Network
 
-// MARK: AppDelegate: UIResponder, UIApplicationDelegate
-
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+final class TMDbWebservice {
+    
     // MARK: Properties
     
-    var window: UIWindow?
-    var tmdbWebservice: TMDbWebservice!
+    private let webservice: CachedWebservice
+    var config: TMDbConfig
     
-    // MARK: UIApplicationDelegate
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        configure()
-        return true
+    // MARK: Init
+    
+    init(webservice: CachedWebservice, config: TMDbConfig) {
+        self.webservice = webservice
+        self.config = config
     }
-    
-    // MARK: Private
-    
-    private func configure() {
-        tmdbWebservice = TMDbWebservice(webservice: CachedWebservice(), config: TMDbConfig())
-        updateConfig()
-    }
-
 }
 
-// MARK: - TMDb Helper Functions -
+// MARK: URL Support
 
-extension AppDelegate {
-    
-    fileprivate func updateConfig() {
-        if let unarchived = TMDbConfig.unarchivedInstance() {
-            updateWith(new: unarchived)
+extension TMDbWebservice {
+    static func urlFrom(parameters: [String: Any], withPathExtension: String? = nil) -> URL {
+        var components = URLComponents()
+        components.scheme = TMDbConstants.TMDB.apiScheme
+        components.host = TMDbConstants.TMDB.apiHost
+        components.path = TMDbConstants.TMDB.apiPath + (withPathExtension ?? "")
+        components.queryItems = [URLQueryItem]()
+        
+        components.queryItems!.append(
+            URLQueryItem(name: TMDbConstants.TMDBParameterKeys.apiKey,
+                         value: TMDbConstants.TMDBParameterValues.apiKey)
+        )
+        
+        for (key, value) in parameters {
+            let queryItem = URLQueryItem(name: key, value: "\(value)")
+            components.queryItems!.append(queryItem)
         }
         
-       tmdbWebservice.config.fetchNewIfDaysSinceUpdateExceeds(7) { [unowned self] config in
-            guard let newConfig = config else { return }
-            self.updateWith(new: newConfig)
-        }
+        return components.url!
     }
-    
-    private func updateWith(new newConfig: TMDbConfig) {
-        tmdbWebservice.config = newConfig
-    }
-    
 }

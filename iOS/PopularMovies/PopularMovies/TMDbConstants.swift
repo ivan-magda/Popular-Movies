@@ -20,52 +20,49 @@
  * THE SOFTWARE.
  */
 
-import UIKit
-import Network
+import Foundation
 
-// MARK: AppDelegate: UIResponder, UIApplicationDelegate
+// MARK: TMDbConstants
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    // MARK: Properties
+struct TMDbConstants {
     
-    var window: UIWindow?
-    var tmdbWebservice: TMDbWebservice!
+    // MARK: - TMDB -
     
-    // MARK: UIApplicationDelegate
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        configure()
-        return true
+    struct TMDB {
+        static let apiScheme = "https"
+        static let apiHost = "api.themoviedb.org"
+        static let apiPath = "/3"
     }
     
-    // MARK: Private
+    // MARK: - TMDB Parameter Keys -
     
-    private func configure() {
-        tmdbWebservice = TMDbWebservice(webservice: CachedWebservice(), config: TMDbConfig())
-        updateConfig()
-    }
-
-}
-
-// MARK: - TMDb Helper Functions -
-
-extension AppDelegate {
-    
-    fileprivate func updateConfig() {
-        if let unarchived = TMDbConfig.unarchivedInstance() {
-            updateWith(new: unarchived)
-        }
-        
-       tmdbWebservice.config.fetchNewIfDaysSinceUpdateExceeds(7) { [unowned self] config in
-            guard let newConfig = config else { return }
-            self.updateWith(new: newConfig)
-        }
+    struct TMDBParameterKeys {
+        static let apiKey = "api_key"
+        static let requestToken = "request_token"
+        static let sessionId = "session_id"
+        static let username = "username"
+        static let password = "password"
     }
     
-    private func updateWith(new newConfig: TMDbConfig) {
-        tmdbWebservice.config = newConfig
+    // MARK: - TMDB Parameter Values -
+    
+    struct TMDBParameterValues {
+        static let apiKey = "REPLACE_WITH_YOUR_OWN_API_KEY"
+    }
+    
+    // MARK: - TMDB Response Keys -
+    
+    struct TMDBResponseKeys {
+        static let title = "title"
+        static let id = "id"
+        static let posterPath = "poster_path"
+        static let statusCode = "status_code"
+        static let statusMessage = "status_message"
+        static let sessionId = "session_id"
+        static let userId = "id"
+        static let requestToken = "request_token"
+        static let success = "success"
+        static let results = "results"
     }
     
 }

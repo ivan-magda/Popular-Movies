@@ -12,6 +12,10 @@ public final class CachedWebservice {
     let webservice: Webservice
     let cache = Cache()
     
+    public init() {
+        self.webservice = Webservice()
+    }
+    
     public init(_ webservice: Webservice) {
         self.webservice = webservice
     }

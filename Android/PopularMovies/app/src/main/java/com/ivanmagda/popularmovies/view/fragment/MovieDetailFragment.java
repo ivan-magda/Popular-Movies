@@ -2,6 +2,7 @@ package com.ivanmagda.popularmovies.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.model.Movie;
 import com.ivanmagda.popularmovies.network.TMDbApi;
+import com.ivanmagda.popularmovies.view.activity.MoviesListActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -75,10 +77,6 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void configure(View view) {
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(R.string.activity_detail_title);
-        }
-
         mTitleTextView = (TextView) view.findViewById(R.id.tv_detail_movie_title);
         mPosterImageView = (ImageView) view.findViewById(R.id.iv_detail_movie_poster);
         mReleaseDateTextView = (TextView) view.findViewById(R.id.tv_detail_movie_release_date);
@@ -89,6 +87,8 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void updateUI() {
+        getActionBar().setTitle(R.string.activity_detail_title);
+
         mTitleTextView.setText(mMovie.getTitle());
         mOverviewTextView.setText(mMovie.getOverview());
 
@@ -100,5 +100,9 @@ public class MovieDetailFragment extends Fragment {
 
         URL url = TMDbApi.buildPosterUrlForMovie(mMovie);
         Picasso.with(getActivity()).load(url.toString()).into(mPosterImageView);
+    }
+
+    private ActionBar getActionBar() {
+        return ((MoviesListActivity) getActivity()).getSupportActionBar();
     }
 }

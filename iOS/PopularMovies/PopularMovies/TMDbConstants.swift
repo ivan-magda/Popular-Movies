@@ -42,12 +42,15 @@ struct TMDbConstants {
         static let sessionId = "session_id"
         static let username = "username"
         static let password = "password"
+        static let page = "page"
+        static let language = "language"
     }
     
     // MARK: - TMDB Parameter Values -
     
     struct TMDBParameterValues {
         static let apiKey = "REPLACE_WITH_YOUR_OWN_API_KEY"
+        static let languageUS = "en-US"
     }
     
     // MARK: - TMDB Response Keys -

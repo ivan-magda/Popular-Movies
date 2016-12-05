@@ -27,7 +27,7 @@ final class TMDbWebservice {
     
     // MARK: Properties
     
-    private let webservice: CachedWebservice
+    fileprivate let webservice: CachedWebservice
     var config: TMDbConfig
     
     // MARK: Init
@@ -35,6 +35,80 @@ final class TMDbWebservice {
     init(webservice: CachedWebservice, config: TMDbConfig) {
         self.webservice = webservice
         self.config = config
+    }
+}
+
+// MARK: - Load Movies -
+
+extension TMDbWebservice {
+    
+    typealias MoviesSuccessCompletionBlock = ([Movie]) -> ()
+    typealias MoviesFailureCompletionBlock = (Error) -> ()
+    
+    private enum MovieSort {
+        case popular, topRated
+    }
+    
+    func popularMovies(success: @escaping MoviesSuccessCompletionBlock,
+                       failure: @escaping MoviesFailureCompletionBlock) {
+        loadMoviesSorted(by: .popular, success: success, failure: failure)
+    }
+    
+    func topRatedMovies(success: @escaping MoviesSuccessCompletionBlock,
+                        failure: @escaping MoviesFailureCompletionBlock) {
+        loadMoviesSorted(by: .topRated, success: success, failure: failure)
+    }
+    
+    private func loadMoviesSorted(by sort: MovieSort,
+                                  success: @escaping MoviesSuccessCompletionBlock,
+                                  failure: @escaping MoviesFailureCompletionBlock) {
+        let parameters = [
+            TMDbConstants.TMDBParameterKeys.page: "1",
+            TMDbConstants.TMDBParameterKeys.language: TMDbConstants.TMDBParameterValues.languageUS
+        ]
+        
+        var url: URL!
+        switch sort {
+        case .popular:
+            url = TMDbWebservice.urlFrom(parameters: parameters, withPathExtension: "/movie/popular")
+        case .topRated:
+            url = TMDbWebservice.urlFrom(parameters: parameters, withPathExtension: "/movie/top_rated")
+        }
+        
+        let resource = Resource<[Movie]>(url: url, parseJSON: { result in
+            guard let json = result as? JSONDictionary,
+                let results = json["results"] as? [JSONDictionary] else { return nil }
+            return results.flatMap(Movie.init)
+        })
+        
+        webservice.load(resource, update: { result in
+            switch result {
+            case .success(let movies):
+                success(movies)
+            case .error(let error):
+                print("Failed to load movies: \(error)")
+                failure(error)
+            }
+        })
+    }
+    
+}
+
+// MARK: - Media Downloading -
+
+extension TMDbWebservice {
+    func imageFor(movie: Movie, completion: @escaping (UIImage?) -> ()) {
+        let url = buildImageUrlFor(movie)
+        let resource = Resource(url: url, parse: UIImage.init)
+        webservice.load(resource) { completion($0.value) }
+    }
+    
+    private static let imageWebservice = CachedWebservice(Webservice())
+    
+    static func imageFor(movie: Movie, completion: @escaping (UIImage?) -> ()) {
+        let url = buildImageUrlFor(movie)
+        let resource = Resource(url: url, parse: UIImage.init)
+        imageWebservice.load(resource) { completion($0.value) }
     }
 }
 
@@ -59,5 +133,25 @@ extension TMDbWebservice {
         }
         
         return components.url!
+    }
+    
+    func buildImageUrlFor(_ movie: Movie) -> URL {
+        return TMDbWebservice.imageUrlForMovie(movie, config: config)
+    }
+    
+    static func buildImageUrlFor(_ movie: Movie) -> URL {
+        let config = TMDbConfig.unarchivedInstance() ?? TMDbConfig()
+        return imageUrlForMovie(movie, config: config)
+    }
+    
+    private static func imageUrlForMovie(_ movie: Movie, config: TMDbConfig) -> URL {
+        let baseUrl = URL(string: config.baseImageURLString)!
+        
+        var idx = config.profileSizes.count / 2
+        if idx < (config.profileSizes.count - 1) { idx += 1 }
+        
+        let sizeUrl = baseUrl.appendingPathComponent(config.profileSizes[idx])
+        
+        return sizeUrl.appendingPathComponent(movie.posterPath)
     }
 }

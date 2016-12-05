@@ -55,7 +55,7 @@ final class TMDbConfig: NSObject, NSCoding {
     // Returns the number days since the config was last updated.
     var daysSinceLastUpdate: Int? {
         if let lastUpdate = dateUpdated {
-            return Int(Date().timeIntervalSince(lastUpdate))
+            return Int(Date().timeIntervalSince(lastUpdate)) / 60*60*24
         } else {
             return nil
         }
@@ -133,6 +133,7 @@ final class TMDbConfig: NSObject, NSCoding {
     }
     
     private func save() {
+        print("New TMDb configuration saved.")
         NSKeyedArchiver.archiveRootObject(self, toFile: fileURL.path)
     }
     

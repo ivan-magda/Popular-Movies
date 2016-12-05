@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: UIApplicationDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        assert(TMDbConstants.TMDBParameterValues.apiKey != "REPLACE_WITH_YOUR_OWN_API_KEY",
+               "Replace TMDb API key with your own in TMDbConstants.swift")
         configure()
         return true
     }
@@ -45,6 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func configure() {
         tmdbWebservice = TMDbWebservice(webservice: CachedWebservice(), config: TMDbConfig())
         updateConfig()
+        
+        let nc = window!.rootViewController as! UINavigationController
+        let moviesVC = nc.viewControllers.first as! MoviesListViewController
+        
+        moviesVC.tmdbWebService = tmdbWebservice
     }
 
 }

@@ -20,16 +20,36 @@
  * THE SOFTWARE.
  */
 
-import UIKit
+import Foundation
 
-// MARK: ViewController: UIViewController
+struct Movie {
+    let id: Int
+    let posterPath: String
+    let overview: String
+    let releaseDateString: String
+    let genreIds: [Int]
+    let title: String
+    let isHasVideo: Bool
+    let rating: Double
+}
 
-class ViewController: UIViewController {
-
-    // MARK: View lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+extension Movie {
+    init?(_ json: [String: Any]) {
+        guard let id = json["id"] as? Int,
+            let posterPath = json["poster_path"] as? String,
+            let overview = json["overview"] as? String,
+            let releaseDateString = json["release_date"] as? String,
+            let genreIds = json["genre_ids"] as? [Int],
+            let title = json["original_title"] as? String,
+            let hasVideo = json["video"] as? Bool,
+            let rating = json["vote_average"] as? Double else { return nil }
+        self.id = id
+        self.posterPath = posterPath
+        self.overview = overview
+        self.releaseDateString = releaseDateString
+        self.genreIds = genreIds
+        self.title = title
+        self.isHasVideo = hasVideo
+        self.rating = rating
     }
-
 }

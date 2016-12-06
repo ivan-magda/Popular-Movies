@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         moviesVC.tmdbWebService = tmdbWebservice
         
-        UINavigationBar.appearance().barStyle = .black
+        UINavigationBar.appearance().barStyle = UIBarStyle.black
         UINavigationBar.appearance().tintColor = .white
     }
 

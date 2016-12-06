@@ -37,6 +37,7 @@ final class MoviesListViewController: UIViewController {
     // MARK: IBOutlets
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var sortingOptionsButton: UIBarButtonItem!
     
     // MARK: Properties
     
@@ -68,7 +69,7 @@ final class MoviesListViewController: UIViewController {
         }
     }
     
-    // MARK: Configure
+    // MARK: Private
     
     private func configure() {
         collectionView.dataSource = collectionViewDataSource
@@ -76,11 +77,18 @@ final class MoviesListViewController: UIViewController {
         
         weak var weakSelf = self
         collectionViewDataSource.didSelect = weakSelf?.showDetail
+        
+        sortingOptionsButton.target = self
+        sortingOptionsButton.action = #selector(changeSortOrderButtonDidPressed)
+        
+        updateTitle()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
     }
     
     private func showDetail(_ movie: Movie) {
         performSegue(withIdentifier: SegueIdentifier.movieDetail.rawValue, sender: movie)
     }
+    
 }
 
 // MARK: - Working with Data Source -
@@ -105,12 +113,53 @@ extension MoviesListViewController {
     
 }
 
+// MARK: - Actions -
+
+extension MoviesListViewController {
+    @objc fileprivate func changeSortOrderButtonDidPressed() {
+        func processOnSelected(order newSortOrder: SortOrder) {
+            guard sortOrder != newSortOrder else { return }
+            sortOrder = newSortOrder
+            updateTitle()
+            loadData()
+        }
+        
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.view.tintColor = .black
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        let sortByPopularity = UIAlertAction(title: "Popular", style: .default) { action in
+            processOnSelected(order: .popular)
+        }
+        
+        let sortByRating = UIAlertAction(title: "Top Rated", style: .default) { action in
+            processOnSelected(order: .topRated)
+        }
+        
+        actionSheet.addAction(sortByPopularity)
+        actionSheet.addAction(sortByRating)
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+}
+
 // MARK: - UI Fucntions -
 
 extension MoviesListViewController {
+    
+    fileprivate func updateTitle() {
+        switch sortOrder {
+        case .popular:
+            navigationItem.title = "Popular Movies"
+        case .topRated:
+            navigationItem.title = "Top Rated Movies"
+        }
+    }
+    
     fileprivate func presentAlertWith(error: Error) {
         let alert = UIAlertController(title: "An error occured", message: "\(error)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+    
 }

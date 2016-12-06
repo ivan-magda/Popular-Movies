@@ -24,7 +24,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="onQ-Gs-IoR">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="RGb-Jp-ep9">
                                     <size key="itemSize" width="300" height="300"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -33,7 +33,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MovieCell" id="0Ns-Ls-wdU" customClass="MovieCollectionViewCell" customModule="PopularMovies" customModuleProvider="target">
-                                        <rect key="frame" x="37.5" y="0.0" width="300" height="300"/>
+                                        <rect key="frame" x="38" y="0.0" width="300" height="300"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
@@ -65,9 +65,12 @@
                             <constraint firstItem="onQ-Gs-IoR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="odn-fh-efi"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Popular Movies" id="fcS-sB-quC"/>
+                    <navigationItem key="navigationItem" title="Popular Movies" id="fcS-sB-quC">
+                        <barButtonItem key="rightBarButtonItem" image="SortingOptions" id="KL6-zV-o5i"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="onQ-Gs-IoR" id="k9G-tl-7Of"/>
+                        <outlet property="sortingOptionsButton" destination="KL6-zV-o5i" id="vQH-eD-lQR"/>
                         <segue destination="ljn-It-8Zp" kind="show" identifier="ShowMovieDetail" id="vm8-Qc-Ori"/>
                     </connections>
                 </viewController>
@@ -199,4 +202,7 @@
             <point key="canvasLocation" x="56.799999999999997" y="738.98050974512751"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="SortingOptions" width="22" height="22"/>
+    </resources>
 </document>

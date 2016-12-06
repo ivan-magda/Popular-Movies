@@ -21,6 +21,7 @@
  */
 
 import UIKit
+import AlamofireImage
 
 // MARK: MoviesCollectionViewDataSource: NSObject
 
@@ -31,6 +32,11 @@ class MoviesCollectionViewDataSource: NSObject {
     
     override init() {
         super.init()
+    }
+    
+    convenience init(_ movies: [Movie]) {
+        self.init()
+        self.movies = movies
     }
 }
 
@@ -51,8 +57,10 @@ extension MoviesCollectionViewDataSource: UICollectionViewDataSource {
     
     private func configure(cell: MovieCollectionViewCell, atIndexPath indexPath: IndexPath) {
         let movie = movies![indexPath.row]
-        weak var weakCell = cell
-        TMDbWebservice.imageFor(movie: movie) { weakCell?.posterImageView.image = $0 }
+        let url = TMDbWebservice.buildImageUrlFor(movie)
+    
+        cell.posterImageView.image = nil
+        cell.posterImageView.af_setImage(withURL: url)
     }
 }
 

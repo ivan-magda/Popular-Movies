@@ -148,7 +148,7 @@ extension TMDbWebservice {
         let baseUrl = URL(string: config.baseImageURLString)!
         
         var idx = config.profileSizes.count / 2
-        if idx < (config.profileSizes.count - 1) { idx += 1 }
+        if idx <= (config.profileSizes.count - 1) { idx -= 1 }
         
         let sizeUrl = baseUrl.appendingPathComponent(config.profileSizes[idx])
         

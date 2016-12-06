@@ -108,7 +108,7 @@ extension MoviesListViewController {
     
     private func updateDataSource(_ newMovies: [Movie]) {
         collectionViewDataSource.movies = newMovies
-        collectionView.reloadSections(IndexSet(integer: 0))
+        collectionView.reloadData()
     }
     
 }

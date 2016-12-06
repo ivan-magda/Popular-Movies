@@ -32,4 +32,16 @@ final class MovieDetailScrollView: UIScrollView {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
     
+    func configure(with viewModel: MovieDetailViewModel) {
+        titleLabel.text = viewModel.titleText
+        posterImageView.af_setImage(withURL: viewModel.imageUrl)
+        releaseDateLabel.text = viewModel.releaseDateText
+        ratingLabel.text = viewModel.ratingText
+        overviewLabel.attributedText = viewModel.overviewAttributedText
+        
+        titleLabel.textColor = viewModel.primaryTextColor
+        releaseDateLabel.textColor = viewModel.secondaryTextColor
+        ratingLabel.textColor = viewModel.secondaryTextColor
+    }
+    
 }

@@ -20,24 +20,8 @@
  * THE SOFTWARE.
  */
 
-import UIKit
+import Foundation
 
-// MARK: MovieCollectionViewCell: UICollectionViewCell
-
-final class MovieCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var posterImageView: UIImageView!
-    
-    static let reuseIdentifier = "MovieCell"
-    
-    // MARK: Private Variables
-    
-    private var delegate: ImagePresentable?
-    
-    // MARK: Public
-    
-    func configure(with delegate: ImagePresentable) {
-        posterImageView.image = nil
-        posterImageView.af_setImage(withURL: delegate.imageUrl)
-    }
+protocol ImagePresentable {
+    var imageUrl: URL { get }
 }

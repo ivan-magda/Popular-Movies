@@ -22,22 +22,35 @@
 
 import UIKit
 
-// MARK: MovieCollectionViewCell: UICollectionViewCell
+private let landscapeWidthScaleFactor:  CGFloat = 4
+private let landscapeHeightScaleFactor: CGFloat = 3
+private let portraitWidthScaleFactor:   CGFloat = 2
+private let portraitHeightScaleFactor:  CGFloat = 2.5
 
-final class MovieCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var posterImageView: UIImageView!
-    
-    static let reuseIdentifier = "MovieCell"
-    
-    // MARK: Private Variables
-    
-    private var delegate: ImagePresentable?
-    
-    // MARK: Public
-    
-    func configure(with delegate: ImagePresentable) {
-        posterImageView.image = nil
-        posterImageView.af_setImage(withURL: delegate.imageUrl)
+// MARK: MovieCellViewModel
+
+struct MovieCellViewModel {
+    let movie: Movie
+}
+
+// MARK: MovieCellViewModel: ImagePresentable
+
+extension MovieCellViewModel: ImagePresentable {
+    var imageUrl: URL {
+        return TMDbWebservice.buildImageUrlFor(movie)
+    }
+}
+
+// MARK: Static
+
+extension MovieCellViewModel {
+    static func sizeForItem(with orientation: UIDeviceOrientation, andRootViewSize size: CGSize) -> CGSize {
+        if orientation.isLandscape {
+            return CGSize(width: size.width / landscapeWidthScaleFactor,
+                          height: size.height / landscapeHeightScaleFactor)
+        } else {
+            return CGSize(width: size.width / portraitWidthScaleFactor,
+                          height: size.height / portraitHeightScaleFactor)
+        }
     }
 }

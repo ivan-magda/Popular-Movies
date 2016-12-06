@@ -77,11 +77,8 @@ extension MoviesCollectionViewDataSource: UICollectionViewDataSource {
     }
     
     private func configure(cell: MovieCollectionViewCell, atIndexPath indexPath: IndexPath) {
-        let movie = movies![indexPath.row]
-        let url = TMDbWebservice.buildImageUrlFor(movie)
-    
-        cell.posterImageView.image = nil
-        cell.posterImageView.af_setImage(withURL: url)
+        let viewModel = MovieCellViewModel(movie: movies![indexPath.row])
+        cell.configure(with: viewModel)
     }
     
 }
@@ -90,12 +87,8 @@ extension MoviesCollectionViewDataSource: UICollectionViewDataSource {
 
 extension MoviesCollectionViewDataSource: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if currentOrientation.isLandscape {
-            return CGSize(width: collectionView.bounds.width / 2, height: collectionView.bounds.height)
-        } else {
-            return CGSize(width: collectionView.bounds.width / 2,
-                          height: collectionView.bounds.height / 2)
-        }
+        return MovieCellViewModel.sizeForItem(with: currentOrientation,
+                                              andRootViewSize: collectionView.bounds.size)
     }
 }
 

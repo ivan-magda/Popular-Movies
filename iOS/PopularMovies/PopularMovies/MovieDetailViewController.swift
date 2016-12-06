@@ -38,21 +38,16 @@ final class MovieDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        configure()
     }
     
     // MARK: Private
     
-    private func setupUI() {
-        contentView.titleLabel.text = movie.title
-        contentView.ratingLabel.text = "Rating: \(movie.rating)"
-        contentView.overviewLabel.text = movie.overview
+    private func configure() {
+        let viewModel = MovieDetailViewModel(movie)
+        contentView.configure(with: viewModel)
         
-        let releaseYear = MovieDateUtils.year(from: movie)
-        contentView.releaseDateLabel.text = "Year: \(releaseYear)"
-        
-        let url = TMDbWebservice.buildImageUrlFor(movie)
-        contentView.posterImageView.af_setImage(withURL: url)
+        view.backgroundColor = viewModel.backgroundColor
     }
 
 }

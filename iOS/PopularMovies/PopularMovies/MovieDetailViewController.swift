@@ -22,11 +22,37 @@
 
 import UIKit
 
-// MARK: MovieCollectionViewCell: UICollectionViewCell
+// MARK: MovieDetailViewController: UIViewController
 
-final class MovieCollectionViewCell: UICollectionViewCell {
+final class MovieDetailViewController: UIViewController {
     
-    @IBOutlet weak var posterImageView: UIImageView!
+    // MARK: IBOutlets
     
-    static let reuseIdentifier = "MovieCell"
+    @IBOutlet weak var contentView: MovieDetailScrollView!
+    
+    // MARK: Properties
+    
+    var movie: Movie!
+
+    // MARK: View Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+    }
+    
+    // MARK: Private
+    
+    private func setupUI() {
+        contentView.titleLabel.text = movie.title
+        contentView.ratingLabel.text = "Rating: \(movie.rating)"
+        contentView.overviewLabel.text = movie.overview
+        
+        let releaseYear = MovieDateUtils.year(from: movie)
+        contentView.releaseDateLabel.text = "Year: \(releaseYear)"
+        
+        let url = TMDbWebservice.buildImageUrlFor(movie)
+        contentView.posterImageView.af_setImage(withURL: url)
+    }
+
 }

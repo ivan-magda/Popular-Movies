@@ -20,13 +20,36 @@
  * THE SOFTWARE.
  */
 
-import UIKit
+import Foundation
 
-// MARK: MovieCollectionViewCell: UICollectionViewCell
+// MARK: MovieDateUtils
 
-final class MovieCollectionViewCell: UICollectionViewCell {
+final class MovieDateUtils {
     
-    @IBOutlet weak var posterImageView: UIImageView!
+    // MARK: Formatters
     
-    static let reuseIdentifier = "MovieCell"
+    private static let dateFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+    
+    // MARK: Init
+    
+    private init() {
+    }
+    
+    // MARK: Date Format
+    
+    static func date(from dateString: String) -> Date? {
+        return dateFormatter.date(from: dateString)
+    }
+    
+    static func year(from movie: Movie) -> Int {
+        let date = dateFormatter.date(from: movie.releaseDateString)!
+        let calendar = Calendar.current
+        return calendar.component(.year, from: date)
+    }
+    
 }

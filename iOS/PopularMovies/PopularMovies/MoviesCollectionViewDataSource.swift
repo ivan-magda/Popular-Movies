@@ -25,7 +25,7 @@ import AlamofireImage
 
 // MARK: MoviesCollectionViewDataSource: NSObject
 
-class MoviesCollectionViewDataSource: NSObject {
+final class MoviesCollectionViewDataSource: NSObject {
     
     var movies: [Movie]?
     var didSelect: ((Movie) -> ())? = { _ in }

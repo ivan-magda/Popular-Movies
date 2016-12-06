@@ -52,6 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let moviesVC = nc.viewControllers.first as! MoviesListViewController
         
         moviesVC.tmdbWebService = tmdbWebservice
+        
+        UINavigationBar.appearance().barStyle = .black
+        UINavigationBar.appearance().tintColor = .white
     }
 
 }

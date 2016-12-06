@@ -22,11 +22,14 @@
 
 import UIKit
 
-// MARK: MovieCollectionViewCell: UICollectionViewCell
+// MARK: MovieDetailScrollView: UIScrollView
 
-final class MovieCollectionViewCell: UICollectionViewCell {
-    
+final class MovieDetailScrollView: UIScrollView {
+
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet weak var releaseDateLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var overviewLabel: UILabel!
     
-    static let reuseIdentifier = "MovieCell"
 }

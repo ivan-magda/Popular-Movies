@@ -26,9 +26,13 @@ fileprivate enum SortOrder {
     case popular, topRated
 }
 
+fileprivate enum SegueIdentifier: String {
+    case movieDetail = "ShowMovieDetail"
+}
+
 // MARK: ViewController: UIViewController
 
-class MoviesListViewController: UIViewController {
+final class MoviesListViewController: UIViewController {
     
     // MARK: IBOutlets
     
@@ -56,6 +60,14 @@ class MoviesListViewController: UIViewController {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifier.movieDetail.rawValue {
+            let selectedMovie = sender as! Movie
+            let detailVC = segue.destination as! MovieDetailViewController
+            detailVC.movie = selectedMovie
+        }
+    }
+    
     // MARK: Configure
     
     private func configure() {
@@ -67,7 +79,7 @@ class MoviesListViewController: UIViewController {
     }
     
     private func showDetail(_ movie: Movie) {
-        
+        performSegue(withIdentifier: SegueIdentifier.movieDetail.rawValue, sender: movie)
     }
 }
 

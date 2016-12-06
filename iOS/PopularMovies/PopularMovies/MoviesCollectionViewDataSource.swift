@@ -30,19 +30,40 @@ class MoviesCollectionViewDataSource: NSObject {
     var movies: [Movie]?
     var didSelect: ((Movie) -> ())? = { _ in }
     
+    fileprivate var currentOrientation: UIDeviceOrientation!
+    
     override init() {
         super.init()
+        
+        let device = UIDevice.current
+        device.beginGeneratingDeviceOrientationNotifications()
+        
+        let nc = NotificationCenter.default
+        nc.addObserver(forName: NSNotification.Name("UIDeviceOrientationDidChangeNotification"),
+                       object: device, queue: nil, using: handleOrientationChange)
     }
     
     convenience init(_ movies: [Movie]) {
         self.init()
         self.movies = movies
     }
+    
+    deinit {
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func handleOrientationChange(_ notification: Notification) {
+        if let device = notification.object as? UIDevice {
+            currentOrientation = device.orientation
+        }
+    }
 }
 
 // MARK: MoviesCollectionViewDataSource: UICollectionViewDataSource
 
 extension MoviesCollectionViewDataSource: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies?.count ?? 0
     }
@@ -62,14 +83,19 @@ extension MoviesCollectionViewDataSource: UICollectionViewDataSource {
         cell.posterImageView.image = nil
         cell.posterImageView.af_setImage(withURL: url)
     }
+    
 }
 
 // MARK: - MoviesCollectionViewDataSource: UICollectionViewDelegateFlowLayout -
 
 extension MoviesCollectionViewDataSource: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width / 2,
-                      height: collectionView.bounds.height / 2)
+        if currentOrientation.isLandscape {
+            return CGSize(width: collectionView.bounds.width / 2, height: collectionView.bounds.height)
+        } else {
+            return CGSize(width: collectionView.bounds.width / 2,
+                          height: collectionView.bounds.height / 2)
+        }
     }
 }
 

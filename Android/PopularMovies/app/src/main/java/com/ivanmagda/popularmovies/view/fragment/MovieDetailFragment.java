@@ -103,6 +103,6 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return ((MoviesListActivity) getActivity()).getSupportActionBar();
+        return ((MovieDetailActivity) getActivity()).getSupportActionBar();
     }
 }

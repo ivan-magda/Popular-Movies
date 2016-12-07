@@ -17,6 +17,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public final class MovieAdapter extends ArrayAdapter<Movie> {
 
     private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
@@ -63,10 +66,7 @@ public final class MovieAdapter extends ArrayAdapter<Movie> {
         if (listView == null) {
             listView = LayoutInflater.from(getContext())
                     .inflate(R.layout.movie_item, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.posterImageView = (ImageView) listView.findViewById(R.id.iv_item_movie_poster);
-
+            viewHolder = new ViewHolder(listView);
             listView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) listView.getTag();
@@ -80,8 +80,12 @@ public final class MovieAdapter extends ArrayAdapter<Movie> {
         return listView;
     }
 
-    private static class ViewHolder {
-        ImageView posterImageView;
+    static class ViewHolder {
+        @BindView(R.id.iv_item_movie_poster) ImageView posterImageView;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public void updateWithNewData(List<Movie> newData) {

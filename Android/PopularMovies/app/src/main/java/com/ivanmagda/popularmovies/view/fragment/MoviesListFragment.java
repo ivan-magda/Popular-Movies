@@ -26,6 +26,9 @@ import com.ivanmagda.popularmovies.view.activity.MoviesListActivity;
 
 import java.util.Arrays;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortOrder.MOST_POPULAR;
 import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortOrder.TOP_RATED;
 
@@ -45,8 +48,8 @@ public class MoviesListFragment extends Fragment {
         TOP_RATED
     }
 
-    private GridView mGridView;
-    private MovieAdapter mMovieAdapter;
+    @BindView(R.id.gv_movies) GridView mGridView;
+    MovieAdapter mMovieAdapter;
 
     private SortOrder mSortOrder = MOST_POPULAR;
     private Movie[] mMovies;
@@ -126,9 +129,9 @@ public class MoviesListFragment extends Fragment {
     }
 
     private void configure(View view) {
+        ButterKnife.bind(this, view);
         updateTitle();
 
-        mGridView = (GridView) view.findViewById(R.id.gv_movies);
         mMovieAdapter = new MovieAdapter(getActivity());
         mGridView.setAdapter(mMovieAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

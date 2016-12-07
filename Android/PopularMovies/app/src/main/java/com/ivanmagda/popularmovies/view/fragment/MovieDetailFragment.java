@@ -12,12 +12,15 @@ import android.widget.TextView;
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.model.Movie;
 import com.ivanmagda.popularmovies.network.TMDbApi;
-import com.ivanmagda.popularmovies.view.activity.MoviesListActivity;
+import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,11 +32,11 @@ public class MovieDetailFragment extends Fragment {
     private static final String MOVIE_STATE_KEY = "movie";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy", Locale.getDefault());
 
-    private TextView mTitleTextView;
-    private ImageView mPosterImageView;
-    private TextView mReleaseDateTextView;
-    private TextView mRatingTextView;
-    private TextView mOverviewTextView;
+    @BindView(R.id.iv_detail_movie_poster) ImageView mPosterImageView;
+    @BindView(R.id.tv_detail_movie_title) TextView mTitleTextView;
+    @BindView(R.id.tv_detail_movie_release_date) TextView mReleaseDateTextView;
+    @BindView(R.id.tv_detail_movie_rating) TextView mRatingTextView;
+    @BindView(R.id.tv_detail_movie_overview) TextView mOverviewTextView;
 
     private Movie mMovie;
 
@@ -77,12 +80,7 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void configure(View view) {
-        mTitleTextView = (TextView) view.findViewById(R.id.tv_detail_movie_title);
-        mPosterImageView = (ImageView) view.findViewById(R.id.iv_detail_movie_poster);
-        mReleaseDateTextView = (TextView) view.findViewById(R.id.tv_detail_movie_release_date);
-        mRatingTextView = (TextView) view.findViewById(R.id.tv_detail_movie_rating);
-        mOverviewTextView = (TextView) view.findViewById(R.id.tv_detail_movie_overview);
-
+        ButterKnife.bind(this, view);
         updateUI();
     }
 

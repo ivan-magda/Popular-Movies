@@ -25,6 +25,7 @@ package com.ivanmagda.popularmovies.view.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ import android.widget.TextView;
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.model.Movie;
 import com.ivanmagda.popularmovies.network.TMDbApi;
-import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -123,6 +123,6 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return ((MovieDetailActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 }

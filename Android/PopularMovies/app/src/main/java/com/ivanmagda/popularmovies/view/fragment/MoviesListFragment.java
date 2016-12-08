@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2016 Ivan Magda
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +45,6 @@ import com.ivanmagda.popularmovies.network.Resource;
 import com.ivanmagda.popularmovies.network.TMDbApi;
 import com.ivanmagda.popularmovies.network.Webservice;
 import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;
-import com.ivanmagda.popularmovies.view.activity.MoviesListActivity;
 
 import java.util.Arrays;
 
@@ -70,7 +70,8 @@ public class MoviesListFragment extends Fragment {
         TOP_RATED
     }
 
-    @BindView(R.id.gv_movies) GridView mGridView;
+    @BindView(R.id.gv_movies)
+    GridView mGridView;
     MovieAdapter mMovieAdapter;
 
     private SortOrder mSortOrder = MOST_POPULAR;
@@ -186,7 +187,7 @@ public class MoviesListFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return ((MoviesListActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     private void fetchMovies() {

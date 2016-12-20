@@ -30,7 +30,7 @@ import com.ivanmagda.popularmovies.view.fragment.MoviesListFragment;
 
 public class MoviesListActivity extends AppCompatActivity {
 
-    private static final String MOVIES_LIST_FRAGMENT_TAG = "moviesLisFragment";
+    private static final String MOVIES_LIST_FRAGMENT_TAG = "moviesListFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

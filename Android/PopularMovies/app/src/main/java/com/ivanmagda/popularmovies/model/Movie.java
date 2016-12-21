@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2016 Ivan Magda
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,7 +27,6 @@ import android.os.Parcelable;
 
 import com.ivanmagda.popularmovies.utilities.MovieDateUtils;
 
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -39,21 +38,19 @@ public final class Movie implements Parcelable {
     private final String mPosterPath;
     private final String mOverview;
     private final String mReleaseDateString;
-    private final int[] mGenreIds;
     private final String mTitle;
-    private final boolean mHasVideo;
     private final double mRating;
+    private byte[] mPoster;
 
-    public Movie(int id, String posterPath, String overview, String releaseDateString,
-                 int[] genreIds, String title, boolean hasVideo, double rating) {
+    public Movie(int id, String posterPath, String overview, String releaseDateString, String title,
+                 double rating, byte[] poster) {
         this.mId = id;
         this.mPosterPath = posterPath;
         this.mOverview = overview;
         this.mReleaseDateString = releaseDateString;
-        this.mGenreIds = genreIds;
         this.mTitle = title;
-        this.mHasVideo = hasVideo;
         this.mRating = rating;
+        this.mPoster = poster;
     }
 
     public Movie(Parcel in) {
@@ -61,9 +58,7 @@ public final class Movie implements Parcelable {
         this.mPosterPath = in.readString();
         this.mOverview = in.readString();
         this.mReleaseDateString = in.readString();
-        this.mGenreIds = in.createIntArray();
         this.mTitle = in.readString();
-        this.mHasVideo = in.readByte() != 0;
         this.mRating = in.readDouble();
     }
 
@@ -78,9 +73,7 @@ public final class Movie implements Parcelable {
         dest.writeString(mPosterPath);
         dest.writeString(mOverview);
         dest.writeString(mReleaseDateString);
-        dest.writeIntArray(mGenreIds);
         dest.writeString(mTitle);
-        dest.writeByte((byte) (mHasVideo ? 1 : 0));
         dest.writeDouble(mRating);
     }
 
@@ -112,16 +105,8 @@ public final class Movie implements Parcelable {
         return mReleaseDateString;
     }
 
-    public int[] getGenreIds() {
-        return mGenreIds;
-    }
-
     public String getTitle() {
         return mTitle;
-    }
-
-    public boolean isHasVideo() {
-        return mHasVideo;
     }
 
     public double getRating() {
@@ -132,6 +117,14 @@ public final class Movie implements Parcelable {
         return MovieDateUtils.fromString(mReleaseDateString);
     }
 
+    public byte[] getPoster() {
+        return mPoster;
+    }
+
+    public void setPoster(byte[] mPoster) {
+        this.mPoster = mPoster;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -139,9 +132,7 @@ public final class Movie implements Parcelable {
                 ", posterPath='" + mPosterPath + '\'' +
                 ", overview='" + mOverview + '\'' +
                 ", releaseDate='" + mReleaseDateString + '\'' +
-                ", genreIds=" + Arrays.toString(mGenreIds) +
                 ", title='" + mTitle + '\'' +
-                ", hasVideo=" + mHasVideo +
                 ", rating=" + mRating +
                 '}';
     }

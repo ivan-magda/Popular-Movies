@@ -12,4 +12,7 @@
     <string name="popular_bar_title">Popular Movies</string>
     <string name="top_rated_bar_title">Top Rated</string>
 
+    <string name="bt_mark_favorite_title">Mark as favorite</string>
+    <string name="bt_remove_from_favorites_title">Remove from favorites</string>
+
 </resources>

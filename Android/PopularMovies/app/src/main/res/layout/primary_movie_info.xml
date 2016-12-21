@@ -23,12 +23,12 @@
 
     <ImageView
         android:id="@+id/iv_detail_movie_poster"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="250dp"
         android:scaleType="fitStart"
         app:layout_constraintEnd_toStartOf="@id/horizontal_middle"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/horizontal_middle"
+        app:layout_constraintRight_toLeftOf="@+id/horizontal_middle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@mipmap/ic_launcher" />
@@ -38,7 +38,10 @@
         style="@style/DetailMovieTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="@id/horizontal_middle"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Release Date" />
@@ -48,9 +51,23 @@
         style="@style/DetailMovieTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/tv_detail_movie_release_date"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="@id/tv_detail_movie_release_date"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail_movie_release_date"
         tools:text="Rating" />
+
+    <Button
+        android:id="@+id/bt_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_detail_movie_rating"
+        tools:text="@string/bt_mark_favorite_title" />
 
 </android.support.constraint.ConstraintLayout>

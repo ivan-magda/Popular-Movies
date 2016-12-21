@@ -11,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <provider
+            android:name=".persistence.MovieProvider"
+            android:authorities="com.ivanmagda.popularmovies"
+            android:exported="false" />
+
         <activity android:name=".view.activity.MoviesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

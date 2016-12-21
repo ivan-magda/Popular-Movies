@@ -14,5 +14,7 @@
 
     <string name="bt_mark_favorite_title">Mark as favorite</string>
     <string name="bt_remove_from_favorites_title">Remove from favorites</string>
+    <string name="action_favorite_name">Favorite</string>
+    <string name="favorite_bar_title">Favorite Movies</string>
 
 </resources>

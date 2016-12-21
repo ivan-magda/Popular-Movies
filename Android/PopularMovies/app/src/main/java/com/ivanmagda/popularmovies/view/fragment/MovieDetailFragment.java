@@ -32,6 +32,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,7 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivanmagda.popularmovies.R;
-import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.network.TMDbApi;
 import com.ivanmagda.popularmovies.persistence.MovieContract.MovieEntry;
 import com.ivanmagda.popularmovies.utilities.ImageUtils;
@@ -137,6 +138,17 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putParcelable(MOVIE_STATE_KEY, mMovie);
         savedInstanceState.putBoolean(FAVORITE_STATE_KEY, mIsFavorite);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            default:
+                return false;
+        }
     }
 
     private void configure(View view) {

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.ivanmagda.popularmovies.model;
+package com.ivanmagda.popularmovies.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

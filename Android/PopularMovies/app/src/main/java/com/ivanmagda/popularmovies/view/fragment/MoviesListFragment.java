@@ -23,9 +23,11 @@
 package com.ivanmagda.popularmovies.view.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -39,11 +41,14 @@ import android.widget.GridView;
 
 import com.ivanmagda.popularmovies.Extras;
 import com.ivanmagda.popularmovies.R;
-import com.ivanmagda.popularmovies.model.Movie;
-import com.ivanmagda.popularmovies.model.MovieAdapter;
+import com.ivanmagda.popularmovies.data.FavoriteMoviesAdapter;
+import com.ivanmagda.popularmovies.data.FavoriteMoviesLoaderCallbacksAdapter;
+import com.ivanmagda.popularmovies.data.MovieAdapter;
+import com.ivanmagda.popularmovies.data.model.Movie;
+import com.ivanmagda.popularmovies.network.MoviesLoader;
 import com.ivanmagda.popularmovies.network.Resource;
 import com.ivanmagda.popularmovies.network.TMDbApi;
-import com.ivanmagda.popularmovies.network.Webservice;
+import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
 import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;
 
 import java.util.Arrays;
@@ -51,6 +56,7 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortOrder.FAVORITE;
 import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortOrder.MOST_POPULAR;
 import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortOrder.TOP_RATED;
 
@@ -60,22 +66,31 @@ import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortO
  * Use the {@link MoviesListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MoviesListFragment extends Fragment {
+public class MoviesListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Movie[]>,
+        FavoriteMoviesLoaderCallbacksAdapter.Delegate {
+
+    /**
+     * Identifies a particular Loader being used in this component.
+     */
+    private static final int MOVIES_LOADER = 1;
+    private static final int FAVORITE_MOVIES_LOADER = 2;
 
     private static final String SORT_ORDER_STATE_KEY = "sortOrder";
-    private static final String MOVIES_STATE_KEY = "movies";
 
     protected enum SortOrder {
+        FAVORITE,
         MOST_POPULAR,
         TOP_RATED
     }
 
     @BindView(R.id.gv_movies)
     GridView mGridView;
-    MovieAdapter mMovieAdapter;
+
+    private MovieAdapter mMovieAdapter;
+    private FavoriteMoviesAdapter mFavoriteMoviesAdapter;
+    private FavoriteMoviesLoaderCallbacksAdapter mFavoriteMoviesCallbacks;
 
     private SortOrder mSortOrder = MOST_POPULAR;
-    private Movie[] mMovies;
 
     public MoviesListFragment() {
         // Required empty public constructor
@@ -97,16 +112,15 @@ public class MoviesListFragment extends Fragment {
 
         if (savedInstanceState != null) {
             mSortOrder = (SortOrder) savedInstanceState.getSerializable(SORT_ORDER_STATE_KEY);
-            mMovies = (Movie[]) savedInstanceState.getParcelableArray(MOVIES_STATE_KEY);
         }
 
-        fetchMovies();
+        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
+        mFavoriteMoviesCallbacks = new FavoriteMoviesLoaderCallbacksAdapter(getContext(), this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_movies_list, container, false);
         setHasOptionsMenu(true);
         configure(view);
@@ -117,7 +131,6 @@ public class MoviesListFragment extends Fragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putSerializable(SORT_ORDER_STATE_KEY, mSortOrder);
-        savedInstanceState.putParcelableArray(MOVIES_STATE_KEY, mMovies);
     }
 
     @Override
@@ -132,6 +145,9 @@ public class MoviesListFragment extends Fragment {
         SortOrder currentSortOrder = mSortOrder;
 
         switch (item.getItemId()) {
+            case R.id.action_favorite:
+                mSortOrder = FAVORITE;
+                break;
             case R.id.action_by_popularity:
                 mSortOrder = MOST_POPULAR;
                 break;
@@ -155,18 +171,19 @@ public class MoviesListFragment extends Fragment {
         ButterKnife.bind(this, view);
         updateTitle();
 
+        mFavoriteMoviesAdapter = new FavoriteMoviesAdapter(getContext(), null);
+
         mMovieAdapter = new MovieAdapter(getActivity());
         mGridView.setAdapter(mMovieAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showMovieDetails(mMovieAdapter.getItem(i));
+                Movie movie = (mSortOrder == FAVORITE ?
+                        MoviePersistenceUtils.makeFromCursor(mFavoriteMoviesAdapter.getCursor())
+                        : mMovieAdapter.getItem(i));
+                showMovieDetails(movie);
             }
         });
-
-        if (mMovies != null) {
-            mMovieAdapter.updateWithNewData(Arrays.asList(mMovies));
-        }
     }
 
     private void showMovieDetails(Movie movie) {
@@ -176,54 +193,67 @@ public class MoviesListFragment extends Fragment {
     }
 
     private void updateTitle() {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar == null) return;
         switch (mSortOrder) {
+            case FAVORITE:
+                actionBar.setTitle(R.string.favorite_bar_title);
+                break;
             case MOST_POPULAR:
-                getActionBar().setTitle(R.string.popular_bar_title);
+                actionBar.setTitle(R.string.popular_bar_title);
                 break;
             case TOP_RATED:
-                getActionBar().setTitle(R.string.top_rated_bar_title);
+                actionBar.setTitle(R.string.top_rated_bar_title);
                 break;
         }
-    }
-
-    private ActionBar getActionBar() {
-        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     private void fetchMovies() {
-        switch (mSortOrder) {
-            case MOST_POPULAR:
-                new FetchMoviesTask().execute(TMDbApi.getPopularMovies());
-                break;
-            case TOP_RATED:
-                new FetchMoviesTask().execute(TMDbApi.getTopRatedMovies());
-                break;
+        if (mSortOrder == FAVORITE) {
+            getLoaderManager().restartLoader(FAVORITE_MOVIES_LOADER, null, mFavoriteMoviesCallbacks);
+            mGridView.setAdapter(mFavoriteMoviesAdapter);
+        } else {
+            getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
+            mGridView.setAdapter(mMovieAdapter);
         }
     }
 
-    private class FetchMoviesTask extends AsyncTask<Resource<Movie[]>, Void, Movie[]> {
-        @SafeVarargs
-        @Override
-        protected final Movie[] doInBackground(Resource<Movie[]>... resources) {
-            return Webservice.load(resources[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Movie[] movies) {
-            super.onPostExecute(movies);
-
-            // Check for activity existing, when thread is executing.
-            if (!isVisible() || isCancelled() ||
-                    (getActivity() != null && getActivity().isFinishing())) {
-                return;
-            }
-
-            if (movies == null) {
-                return;
-            }
-
-            mMovies = movies;
-            mMovieAdapter.updateWithNewData(Arrays.asList(movies));
+    @Override
+    public Loader<Movie[]> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case MOVIES_LOADER:
+                Resource<Movie[]> resource = (mSortOrder == MOST_POPULAR ?
+                        TMDbApi.getPopularMovies() :
+                        TMDbApi.getTopRatedMovies()
+                );
+                return new MoviesLoader(getContext(), resource);
+            default:
+                throw new IllegalArgumentException("Unsupported loader with id: " + String.valueOf(id));
         }
     }
+
+    @Override
+    public void onLoadFinished(Loader<Movie[]> loader, Movie[] movies) {
+        mMovieAdapter.updateWithNewData(Arrays.asList(movies));
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Movie[]> movies) {
+    }
+
+    /**
+     * Implement FavoriteMoviesLoaderCallbacksAdapter.Delegate interface for getting know when data
+     * loaded.
+     */
+
+    @Override
+    public void didFinishLoading(FavoriteMoviesLoaderCallbacksAdapter callbacksAdapter, Cursor cursor) {
+        mFavoriteMoviesAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void didLoadReset(FavoriteMoviesLoaderCallbacksAdapter callbacksAdapter) {
+        mFavoriteMoviesAdapter.swapCursor(null);
+    }
+
 }

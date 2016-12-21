@@ -26,7 +26,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.utilities.MovieJsonUtils;
 
 import java.io.UnsupportedEncodingException;

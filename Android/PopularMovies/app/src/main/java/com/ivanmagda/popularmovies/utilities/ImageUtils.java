@@ -23,6 +23,7 @@
 package com.ivanmagda.popularmovies.utilities;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
@@ -52,6 +53,13 @@ public class ImageUtils {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
         return baos.toByteArray();
+    }
+
+    public static Bitmap bitmapFromBytes(byte[] data) {
+        if (data == null || data.length == 0) {
+            return null;
+        }
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
     }
 
 }

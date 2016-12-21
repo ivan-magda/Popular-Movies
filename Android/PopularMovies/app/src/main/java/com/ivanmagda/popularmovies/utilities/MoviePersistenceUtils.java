@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.persistence.MovieContract.MovieEntry;
 
 public final class MoviePersistenceUtils {

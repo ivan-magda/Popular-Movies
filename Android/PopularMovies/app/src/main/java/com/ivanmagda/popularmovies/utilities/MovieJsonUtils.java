@@ -22,7 +22,7 @@
 
 package com.ivanmagda.popularmovies.utilities;
 
-import com.ivanmagda.popularmovies.model.Movie;
+import com.ivanmagda.popularmovies.data.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;

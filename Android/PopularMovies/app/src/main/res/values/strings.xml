@@ -16,5 +16,6 @@
     <string name="bt_remove_from_favorites_title">Remove from favorites</string>
     <string name="action_favorite_name">Favorite</string>
     <string name="favorite_bar_title">Favorite Movies</string>
+    <string name="no_internet_connection_message">There is no internet connection</string>
 
 </resources>

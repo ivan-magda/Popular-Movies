@@ -3,6 +3,7 @@
     package="com.ivanmagda.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,8 @@
             android:authorities="com.ivanmagda.popularmovies"
             android:exported="false" />
 
-        <activity android:name=".view.activity.MoviesListActivity"
+        <activity
+            android:name=".view.activity.MoviesListActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

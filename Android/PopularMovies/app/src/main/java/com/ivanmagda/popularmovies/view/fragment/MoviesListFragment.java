@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.ivanmagda.popularmovies.Extras;
 import com.ivanmagda.popularmovies.R;
@@ -48,6 +49,7 @@ import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.network.MoviesLoader;
 import com.ivanmagda.popularmovies.network.Resource;
 import com.ivanmagda.popularmovies.network.TMDbApi;
+import com.ivanmagda.popularmovies.utilities.ConnectivityUtils;
 import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
 import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;
 
@@ -114,8 +116,8 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
             mSortOrder = (SortOrder) savedInstanceState.getSerializable(SORT_ORDER_STATE_KEY);
         }
 
-        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
         mFavoriteMoviesCallbacks = new FavoriteMoviesLoaderCallbacksAdapter(getContext(), this);
+        fetchMovies();
     }
 
     @Override
@@ -209,12 +211,22 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void fetchMovies() {
-        if (mSortOrder == FAVORITE) {
-            getLoaderManager().restartLoader(FAVORITE_MOVIES_LOADER, null, mFavoriteMoviesCallbacks);
-            mGridView.setAdapter(mFavoriteMoviesAdapter);
-        } else {
-            getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
-            mGridView.setAdapter(mMovieAdapter);
+        switch (mSortOrder) {
+            case FAVORITE:
+                getLoaderManager().restartLoader(FAVORITE_MOVIES_LOADER, null, mFavoriteMoviesCallbacks);
+                mGridView.setAdapter(mFavoriteMoviesAdapter);
+                break;
+            case MOST_POPULAR:
+            case TOP_RATED:
+                if (!ConnectivityUtils.isOnline(getContext())) {
+                    Toast.makeText(getContext(), R.string.no_internet_connection_message, Toast.LENGTH_SHORT).show();
+                } else {
+                    getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
+                    mGridView.setAdapter(mMovieAdapter);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported sort order: " + String.valueOf(mSortOrder));
         }
     }
 
@@ -234,11 +246,16 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Movie[]> loader, Movie[] movies) {
-        mMovieAdapter.updateWithNewData(Arrays.asList(movies));
+        if (movies != null) {
+            mMovieAdapter.updateWithNewData(Arrays.asList(movies));
+        } else {
+            mMovieAdapter.updateWithNewData(null);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Movie[]> movies) {
+        mMovieAdapter.updateWithNewData(null);
     }
 
     /**

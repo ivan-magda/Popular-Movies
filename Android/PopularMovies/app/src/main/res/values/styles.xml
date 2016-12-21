@@ -2,17 +2,9 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <!-- Theme of the detail -->
-    <style name="DetailTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/detailColorPrimary</item>
-        <item name="colorPrimaryDark">@color/detailColorPrimaryDark</item>
-        <item name="colorAccent">@color/detailColorAscent</item>
     </style>
 
     <style name="MoviesGridView">
@@ -26,11 +18,15 @@
     </style>
 
     <style name="MovieTitleTextView">
-        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display1</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/default_padding</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:paddingLeft">@dimen/default_padding</item>
+        <item name="android:paddingRight">@dimen/default_padding</item>
+        <item name="android:paddingTop">@dimen/tv_title_top_padding</item>
+        <item name="android:paddingBottom">@dimen/tv_title_top_padding</item>
     </style>
 
     <style name="JustifyTextView">
@@ -39,13 +35,11 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="DefaultMovieTextView">
-
+    <style name="DetailMovieTextView">
         <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">@dimen/default_margin</item>
     </style>
 
 </resources>

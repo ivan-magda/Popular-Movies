@@ -21,8 +21,7 @@
 
         <activity
             android:name=".view.activity.MovieDetailActivity"
-            android:parentActivityName=".view.activity.MoviesListActivity"
-            android:theme="@style/DetailTheme">
+            android:parentActivityName=".view.activity.MoviesListActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

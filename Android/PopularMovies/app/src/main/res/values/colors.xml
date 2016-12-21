@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFC107</color>
-    <color name="colorPrimaryDark">#FFA000</color>
-    <color name="colorPrimaryLight">#FFECB3</color>
-    <color name="colorAccent">#009688</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimaryLight">#9E9E9E</color>
+    <color name="colorAccent">#359787</color>
     <color name="colorDivider">#BDBDBD</color>
 
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
-
-    <!-- Primary color for the detail -->
-    <color name="detailColorPrimary">#F44336</color>
-
-    <!-- Primary dark color for the detail -->
-    <color name="detailColorPrimaryDark">#D32F2F</color>
-
-    <!-- Ascent color for the detail -->
-    <color name="detailColorAscent">#448AFF</color>
 </resources>

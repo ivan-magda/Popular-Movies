@@ -29,11 +29,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,6 +169,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        setHasOptionsMenu(true);
         configure(view);
         return view;
     }
@@ -178,10 +182,27 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.detail, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().onBackPressed();
+                return true;
+            case R.id.action_share:
+                if (mTrailers == null || mTrailers.size() == 0) return false;
+                String trailerUrl = YouTubeTrailerUtils.buildVideoUriForTrailer(mTrailers.get(0)).toString();
+                ShareCompat.IntentBuilder
+                        .from(getActivity())
+                        .setType("text/plain")
+                        .setChooserTitle(mMovie.getTitle())
+                        .setText(trailerUrl)
+                        .startChooser();
                 return true;
             default:
                 return false;

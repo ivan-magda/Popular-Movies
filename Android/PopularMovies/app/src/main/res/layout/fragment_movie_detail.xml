@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!--Overview-->
     <TextView
         style="@style/HeadlineTextView"
         android:paddingTop="@dimen/default_padding"
@@ -25,18 +26,30 @@
         style="@style/JustifyTextView"
         android:paddingLeft="@dimen/default_padding"
         android:paddingRight="@dimen/default_padding"
-        android:paddingTop="4dp"
+        android:paddingTop="@dimen/padding_small"
         android:textSize="18sp"
         tools:text="Overview content goes here" />
 
+    <!--Reviews-->
     <TextView
         style="@style/HeadlineTextView"
-        android:paddingBottom="4dp"
+        android:paddingBottom="@dimen/padding_small"
         android:paddingTop="@dimen/default_padding"
         android:text="@string/tv_reviews_title" />
 
     <include
         layout="@layout/review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--Trailers-->
+    <TextView
+        style="@style/HeadlineTextView"
+        android:paddingBottom="@dimen/padding_small"
+        android:text="@string/tv_trailers_title" />
+
+    <include
+        layout="@layout/trailer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

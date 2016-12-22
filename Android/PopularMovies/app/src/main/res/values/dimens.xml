@@ -11,4 +11,6 @@
 
     <dimen name="tv_title_top_padding">32dp</dimen>
     <dimen name="iv_poster_height">250dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
 </resources>

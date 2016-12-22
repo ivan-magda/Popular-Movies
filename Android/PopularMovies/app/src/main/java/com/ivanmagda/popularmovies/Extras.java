@@ -27,9 +27,10 @@ package com.ivanmagda.popularmovies;
  */
 public final class Extras {
 
-    private Extras() {
-    }
-
     public static final String EXTRA_MOVIE_TRANSFER = "com.ivanmagda.popularmovies.extra_movie_tarnsfer";
     public static final String EXTRA_REVIEW_TRANSFER = "com.ivanmagda.popularmovies.extra_review_transfer";
+    public static final String EXTRA_TRAILER_TRANSFER = "com.ivanmagda.popularmovies.extra_trailer_transfer";
+
+    private Extras() {
+    }
 }

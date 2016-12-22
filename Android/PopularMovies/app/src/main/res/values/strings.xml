@@ -22,5 +22,8 @@
     <string name="bt_more">More</string>
     <string name="no_reviews_message">No reviews.</string>
     <string name="activity_reviews_title">Reviews</string>
+    <string name="tv_trailers_title">Trailers</string>
+    <string name="tv_no_trailers_title">No trailers.</string>
+    <string name="activity_trailers_title">Trailers</string>
 
 </resources>

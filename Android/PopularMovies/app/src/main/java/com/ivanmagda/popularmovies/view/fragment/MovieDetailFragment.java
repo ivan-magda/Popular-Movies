@@ -33,12 +33,12 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +54,9 @@ import com.ivanmagda.popularmovies.persistence.MovieContract.MovieEntry;
 import com.ivanmagda.popularmovies.utilities.ConnectivityUtils;
 import com.ivanmagda.popularmovies.utilities.ImageUtils;
 import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
+import com.ivanmagda.popularmovies.utilities.YouTubeTrailerUtils;
 import com.ivanmagda.popularmovies.view.activity.ReviewsActivity;
+import com.ivanmagda.popularmovies.view.activity.TrailersActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -71,7 +73,8 @@ import butterknife.ButterKnife;
  * Use the {@link MovieDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        View.OnClickListener {
 
     private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
@@ -110,7 +113,16 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     TextView mAuthorTextView;
 
     @BindView(R.id.bt_show_more_reviews)
-    Button mShowMoreButton;
+    Button mShowMoreReviewsButton;
+
+    @BindView(R.id.ib_trailer)
+    ImageButton mTrailerImageButton;
+
+    @BindView(R.id.tv_trailer_message)
+    TextView mTrailerMessageTextView;
+
+    @BindView(R.id.bt_show_more_trailers)
+    Button mShowMoreTrailersButton;
 
     /**
      * The detail movie.
@@ -118,6 +130,7 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private Movie mMovie;
 
     private List<Review> mReviews = null;
+    private List<YouTubeTrailer> mTrailers = null;
 
     /**
      * Helps to determine where's movie is in favorites or not.
@@ -179,33 +192,22 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         ButterKnife.bind(this, view);
         updateUI();
 
-        mFavoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFavorite();
-            }
-        });
-
-        mShowMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ReviewsActivity.class);
-                intent.putParcelableArrayListExtra(Extras.EXTRA_REVIEW_TRANSFER,
-                        (ArrayList<Review>) mReviews);
-                startActivity(intent);
-            }
-        });
-
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
 
         if (!ConnectivityUtils.isOnline(getContext())) {
             Toast.makeText(getContext(), R.string.no_internet_connection_message,
                     Toast.LENGTH_SHORT).show();
             updateReviews();
+            updateTrailers();
         } else {
             new ReviewsFetchTask().execute();
             new TrailersFetchTask().execute();
         }
+
+        mFavoriteButton.setOnClickListener(this);
+        mShowMoreReviewsButton.setOnClickListener(this);
+        mShowMoreTrailersButton.setOnClickListener(this);
+        mTrailerImageButton.setOnClickListener(this);
     }
 
     private void updateUI() {
@@ -298,6 +300,33 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
+    @Override
+    public void onClick(View view) {
+        final int id = view.getId();
+        switch (id) {
+            case R.id.bt_favorite:
+                toggleFavorite();
+                break;
+            case R.id.bt_show_more_reviews:
+                Intent reviewsIntent = new Intent(getContext(), ReviewsActivity.class);
+                reviewsIntent.putParcelableArrayListExtra(Extras.EXTRA_REVIEW_TRANSFER,
+                        (ArrayList<Review>) mReviews);
+                startActivity(reviewsIntent);
+                break;
+            case R.id.bt_show_more_trailers:
+                Intent trailersIntent = new Intent(getContext(), TrailersActivity.class);
+                trailersIntent.putParcelableArrayListExtra(Extras.EXTRA_TRAILER_TRANSFER,
+                        (ArrayList<YouTubeTrailer>) mTrailers);
+                startActivity(trailersIntent);
+                break;
+            case R.id.ib_trailer:
+                YouTubeTrailerUtils.openVideoInWeb(getContext(), mTrailers.get(0));
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported click handle with id: " + id);
+        }
+    }
+
     /**
      * Fetch movie additional info:
      * 1) Reviews.
@@ -324,11 +353,11 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     private void updateReviews() {
         if (mReviews == null || mReviews.size() == 0) {
             mContentTextView.setText(R.string.no_reviews_message);
-            mAuthorTextView.setVisibility(View.INVISIBLE);
-            mShowMoreButton.setVisibility(View.INVISIBLE);
+            mAuthorTextView.setVisibility(View.GONE);
+            mShowMoreReviewsButton.setVisibility(View.GONE);
         } else {
             mAuthorTextView.setVisibility(View.VISIBLE);
-            mShowMoreButton.setVisibility(View.VISIBLE);
+            mShowMoreReviewsButton.setVisibility(View.VISIBLE);
 
             Review review = mReviews.get(0);
             mContentTextView.setText(review.getContent());
@@ -348,11 +377,23 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
         @Override
         protected void onPostExecute(List<YouTubeTrailer> youTubeTrailers) {
-            if (youTubeTrailers == null) return;
-            Log.d(LOG_TAG, "Fetched trailers count: " + youTubeTrailers.size());
-            if (youTubeTrailers.size() > 0) {
-                Log.d(LOG_TAG, "Sample trailer: " + youTubeTrailers.get(0));
-            }
+            mTrailers = youTubeTrailers;
+            updateTrailers();
+        }
+    }
+
+    private void updateTrailers() {
+        if (mTrailers == null || mTrailers.size() == 0) {
+            mTrailerMessageTextView.setVisibility(View.VISIBLE);
+            mTrailerImageButton.setVisibility(View.GONE);
+            mShowMoreTrailersButton.setVisibility(View.INVISIBLE);
+        } else {
+            mTrailerMessageTextView.setVisibility(View.GONE);
+            mTrailerImageButton.setVisibility(View.VISIBLE);
+            mShowMoreTrailersButton.setVisibility(View.VISIBLE);
+
+            Uri uri = YouTubeTrailerUtils.buildVideoThumbnailUriForTrailer(mTrailers.get(0));
+            Picasso.with(getContext()).load(uri).into(mTrailerImageButton);
         }
     }
 

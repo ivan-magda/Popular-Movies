@@ -53,7 +53,7 @@ import com.ivanmagda.popularmovies.utilities.ConnectivityUtils;
 import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
 import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;
 
-import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,7 +68,7 @@ import static com.ivanmagda.popularmovies.view.fragment.MoviesListFragment.SortO
  * Use the {@link MoviesListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MoviesListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Movie[]>,
+public class MoviesListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Movie>>,
         FavoriteMoviesLoaderCallbacksAdapter.Delegate {
 
     /**
@@ -220,10 +220,11 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
             case TOP_RATED:
                 if (!ConnectivityUtils.isOnline(getContext())) {
                     Toast.makeText(getContext(), R.string.no_internet_connection_message, Toast.LENGTH_SHORT).show();
+                    mMovieAdapter.updateWithNewData(null);
                 } else {
                     getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
-                    mGridView.setAdapter(mMovieAdapter);
                 }
+                mGridView.setAdapter(mMovieAdapter);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported sort order: " + String.valueOf(mSortOrder));
@@ -231,10 +232,10 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public Loader<Movie[]> onCreateLoader(int id, Bundle args) {
+    public Loader<List<Movie>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case MOVIES_LOADER:
-                Resource<Movie[]> resource = (mSortOrder == MOST_POPULAR ?
+                Resource<List<Movie>> resource = (mSortOrder == MOST_POPULAR ?
                         TMDbApi.getPopularMovies() :
                         TMDbApi.getTopRatedMovies()
                 );
@@ -245,16 +246,16 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public void onLoadFinished(Loader<Movie[]> loader, Movie[] movies) {
+    public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> movies) {
         if (movies != null) {
-            mMovieAdapter.updateWithNewData(Arrays.asList(movies));
+            mMovieAdapter.updateWithNewData(movies);
         } else {
             mMovieAdapter.updateWithNewData(null);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Movie[]> movies) {
+    public void onLoaderReset(Loader<List<Movie>> movies) {
         mMovieAdapter.updateWithNewData(null);
     }
 

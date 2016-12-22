@@ -11,7 +11,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name=".persistence.MovieProvider"
             android:authorities="com.ivanmagda.popularmovies"
@@ -28,12 +27,24 @@
         </activity>
 
         <activity
+            android:launchMode="singleTop"
             android:name=".view.activity.MovieDetailActivity"
             android:parentActivityName=".view.activity.MoviesListActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activity.MoviesListActivity" />
+        </activity>
+
+        <activity
+            android:name=".view.activity.ReviewsActivity"
+            android:parentActivityName=".view.activity.MovieDetailActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MovieDetailActivity" />
         </activity>
     </application>
 

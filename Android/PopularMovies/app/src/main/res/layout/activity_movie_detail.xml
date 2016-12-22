@@ -4,7 +4,6 @@
     android:id="@+id/activity_movie_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.ivanmagda.popularmovies.view.activity.MovieDetailActivity">
 
 </ScrollView>

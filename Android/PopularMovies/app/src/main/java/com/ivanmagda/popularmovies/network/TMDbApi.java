@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class TMDbApi {
@@ -65,13 +66,13 @@ public final class TMDbApi {
     /**
      * @return The popular movies Resource.
      */
-    public static Resource<Movie[]> getPopularMovies() {
+    public static Resource<List<Movie>> getPopularMovies() {
         URL url = buildUrl(POPULAR_MOVIES_PATH, getDefaultMethodParameters());
         return new Resource<>(
                 url,
-                new Resource.Parse<Movie[]>() {
+                new Resource.Parse<List<Movie>>() {
                     @Override
-                    public Movie[] parse(String response) {
+                    public List<Movie> parse(String response) {
                         return MovieJsonUtils.buildMoviesFromResponse(response);
                     }
                 }
@@ -81,41 +82,41 @@ public final class TMDbApi {
     /**
      * @return The top rated movies resource.
      */
-    public static Resource<Movie[]> getTopRatedMovies() {
+    public static Resource<List<Movie>> getTopRatedMovies() {
         URL url = buildUrl(TOP_RATED_MOVIES_PATH, getDefaultMethodParameters());
         return new Resource<>(
                 url,
-                new Resource.Parse<Movie[]>() {
+                new Resource.Parse<List<Movie>>() {
                     @Override
-                    public Movie[] parse(String response) {
+                    public List<Movie> parse(String response) {
                         return MovieJsonUtils.buildMoviesFromResponse(response);
                     }
                 }
         );
     }
 
-    public static Resource<YouTubeTrailer[]> getVideosForMovie(@NonNull final Movie movie) {
+    public static Resource<List<YouTubeTrailer>> getVideosForMovie(@NonNull final Movie movie) {
         final String path = "movie/" + String.valueOf(movie.getId()) + "/videos";
         URL url = buildUrl(path, getDefaultMethodParameters());
         return new Resource<>(
                 url,
-                new Resource.Parse<YouTubeTrailer[]>() {
+                new Resource.Parse<List<YouTubeTrailer>>() {
                     @Override
-                    public YouTubeTrailer[] parse(String response) {
+                    public List<YouTubeTrailer> parse(String response) {
                         return YouTubeTrailerJsonUtils.buildTrailersFromResponse(response);
                     }
                 }
         );
     }
 
-    public static Resource<Review[]> getReviewsForMovie(@NonNull final Movie movie) {
+    public static Resource<List<Review>> getReviewsForMovie(@NonNull final Movie movie) {
         final String path = "movie/" + String.valueOf(movie.getId()) + "/reviews";
         URL url = buildUrl(path, getDefaultMethodParameters());
         return new Resource<>(
                 url,
-                new Resource.Parse<Review[]>() {
+                new Resource.Parse<List<Review>>() {
                     @Override
-                    public Review[] parse(String response) {
+                    public List<Review> parse(String response) {
                         return ReviewsJsonUtils.buildReviewsFromResponse(response);
                     }
                 }

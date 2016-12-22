@@ -22,6 +22,8 @@
 
 package com.ivanmagda.popularmovies.utilities.json;
 
+import android.text.TextUtils;
+
 import com.ivanmagda.popularmovies.data.model.Movie;
 
 import org.json.JSONArray;
@@ -49,7 +51,8 @@ public final class MovieJsonUtils {
     private MovieJsonUtils() {
     }
 
-    public static Movie[] buildMoviesFromResponse(String response) {
+    public static List<Movie> buildMoviesFromResponse(String response) {
+        if (TextUtils.isEmpty(response)) return null;
         try {
             JSONObject json = new JSONObject(response);
             JSONArray movies = json.getJSONArray(RESULTS_RESPONSE_KEY);
@@ -60,8 +63,8 @@ public final class MovieJsonUtils {
         return null;
     }
 
-    public static Movie[] parseMovies(JSONArray jsonMovies) throws JSONException {
-        List<Movie> movies = JsonUtils.parseJsonArray(
+    public static List<Movie> parseMovies(JSONArray jsonMovies) throws JSONException {
+        return JsonUtils.parseJsonArray(
                 jsonMovies,
                 new JsonUtils.Parcelable<Movie>() {
                     @Override
@@ -70,7 +73,6 @@ public final class MovieJsonUtils {
                     }
                 }
         );
-        return movies.toArray(new Movie[movies.size()]);
     }
 
     public static Movie parseMovie(JSONObject jsonObject) throws JSONException {

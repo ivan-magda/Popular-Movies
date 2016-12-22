@@ -77,7 +77,7 @@ public final class Movie implements Parcelable {
         dest.writeDouble(mRating);
     }
 
-    static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel parcel) {
             return new Movie(parcel);

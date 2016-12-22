@@ -1,9 +1,12 @@
 package com.ivanmagda.popularmovies.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public final class Review {
+public final class Review implements Parcelable {
 
     private final String mId;
     private final String mAuthor;
@@ -16,6 +19,38 @@ public final class Review {
         this.mContent = content;
         this.mUrl = url;
     }
+
+    public Review(Parcel in) {
+        this.mId = in.readString();
+        this.mAuthor = in.readString();
+        this.mContent = in.readString();
+        this.mUrl = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeString(mId);
+        dest.writeString(mAuthor);
+        dest.writeString(mContent);
+        dest.writeString(mUrl);
+    }
+
+    public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>() {
+        @Override
+        public Review createFromParcel(Parcel parcel) {
+            return new Review(parcel);
+        }
+
+        @Override
+        public Review[] newArray(int size) {
+            return new Review[size];
+        }
+    };
 
     public String getId() {
         return mId;

@@ -1,5 +1,7 @@
 package com.ivanmagda.popularmovies.utilities.json;
 
+import android.text.TextUtils;
+
 import com.ivanmagda.popularmovies.data.model.Review;
 
 import org.json.JSONArray;
@@ -25,7 +27,8 @@ public final class ReviewsJsonUtils {
     private ReviewsJsonUtils() {
     }
 
-    public static Review[] buildReviewsFromResponse(String response) {
+    public static List<Review> buildReviewsFromResponse(String response) {
+        if (TextUtils.isEmpty(response)) return null;
         try {
             JSONObject json = new JSONObject(response);
             JSONArray reviews = json.getJSONArray(RESULTS_RESPONSE_KEY);
@@ -36,8 +39,8 @@ public final class ReviewsJsonUtils {
         }
     }
 
-    public static Review[] parseReviews(JSONArray jsonArray) throws JSONException {
-        List<Review> reviews = JsonUtils.parseJsonArray(
+    public static List<Review> parseReviews(JSONArray jsonArray) throws JSONException {
+        return JsonUtils.parseJsonArray(
                 jsonArray,
                 new JsonUtils.Parcelable<Review>() {
                     @Override
@@ -46,13 +49,12 @@ public final class ReviewsJsonUtils {
                     }
                 }
         );
-        return reviews.toArray(new Review[reviews.size()]);
     }
 
     public static Review parseReview(JSONObject jsonObject) throws JSONException {
         String id = jsonObject.getString(ID_RESPONSE_KEY);
         String author = jsonObject.getString(AUTHOR_RESPONSE_KEY);
-        String content = jsonObject.getString(CONTENT_RESPONSE_KEY);
+        String content = jsonObject.getString(CONTENT_RESPONSE_KEY).trim();
         String url = jsonObject.getString(URL_RESPONSE_KEY);
         return new Review(id, author, content, url);
     }

@@ -17,5 +17,10 @@
     <string name="action_favorite_name">Favorite</string>
     <string name="favorite_bar_title">Favorite Movies</string>
     <string name="no_internet_connection_message">There is no internet connection</string>
+    <string name="tv_reviews_title">Reviews</string>
+    <string name="tv_overview_title">Overview</string>
+    <string name="bt_more">More</string>
+    <string name="no_reviews_message">No reviews.</string>
+    <string name="activity_reviews_title">Reviews</string>
 
 </resources>

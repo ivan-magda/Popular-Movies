@@ -5,11 +5,13 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import com.ivanmagda.popularmovies.data.model.Movie;
 
-public final class MoviesLoader extends AsyncTaskLoader<Movie[]> {
+import java.util.List;
 
-    private Resource<Movie[]> mResource;
+public final class MoviesLoader extends AsyncTaskLoader<List<Movie>> {
 
-    public MoviesLoader(Context context, Resource<Movie[]> resource) {
+    private Resource<List<Movie>> mResource;
+
+    public MoviesLoader(Context context, Resource<List<Movie>> resource) {
         super(context);
         this.mResource = resource;
     }
@@ -20,7 +22,7 @@ public final class MoviesLoader extends AsyncTaskLoader<Movie[]> {
     }
 
     @Override
-    public Movie[] loadInBackground() {
+    public List<Movie> loadInBackground() {
         if (mResource == null) {
             return null;
         }

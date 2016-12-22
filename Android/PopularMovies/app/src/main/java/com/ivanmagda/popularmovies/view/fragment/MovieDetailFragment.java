@@ -22,6 +22,7 @@
 
 package com.ivanmagda.popularmovies.view.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ivanmagda.popularmovies.Extras;
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.data.model.Review;
@@ -49,12 +51,16 @@ import com.ivanmagda.popularmovies.data.model.YouTubeTrailer;
 import com.ivanmagda.popularmovies.network.TMDbApi;
 import com.ivanmagda.popularmovies.network.Webservice;
 import com.ivanmagda.popularmovies.persistence.MovieContract.MovieEntry;
+import com.ivanmagda.popularmovies.utilities.ConnectivityUtils;
 import com.ivanmagda.popularmovies.utilities.ImageUtils;
 import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
+import com.ivanmagda.popularmovies.view.activity.ReviewsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -97,10 +103,21 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     @BindView(R.id.bt_favorite)
     Button mFavoriteButton;
 
+    @BindView(R.id.tv_review_content)
+    TextView mContentTextView;
+
+    @BindView(R.id.tv_author)
+    TextView mAuthorTextView;
+
+    @BindView(R.id.bt_show_more_reviews)
+    Button mShowMoreButton;
+
     /**
      * The detail movie.
      */
     private Movie mMovie;
+
+    private List<Review> mReviews = null;
 
     /**
      * Helps to determine where's movie is in favorites or not.
@@ -169,10 +186,26 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
+        mShowMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ReviewsActivity.class);
+                intent.putParcelableArrayListExtra(Extras.EXTRA_REVIEW_TRANSFER,
+                        (ArrayList<Review>) mReviews);
+                startActivity(intent);
+            }
+        });
+
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
 
-        new ReviewsFetchTask().execute();
-        new TrailersFetchTask().execute();
+        if (!ConnectivityUtils.isOnline(getContext())) {
+            Toast.makeText(getContext(), R.string.no_internet_connection_message,
+                    Toast.LENGTH_SHORT).show();
+            updateReviews();
+        } else {
+            new ReviewsFetchTask().execute();
+            new TrailersFetchTask().execute();
+        }
     }
 
     private void updateUI() {
@@ -231,6 +264,18 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
+    /**
+     * Implement LoaderManager.LoaderCallbacks<Cursor> for getting know is this mMovies in favorites
+     * or not.
+     */
+
+    /**
+     * Creates loader that queries currently presenting movie.
+     *
+     * @param loaderId Id of the loader.
+     * @param args     Additional loader arguments.
+     * @return CursorLoader that queries movie.
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
         switch (loaderId) {
@@ -253,32 +298,60 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
-    private class ReviewsFetchTask extends AsyncTask<Void, Void, Review[]> {
+    /**
+     * Fetch movie additional info:
+     * 1) Reviews.
+     * 2) Trailers.
+     */
+
+    private class ReviewsFetchTask extends AsyncTask<Void, Void, List<Review>> {
         @Override
-        protected Review[] doInBackground(Void... params) {
-            return Webservice.load(TMDbApi.getReviewsForMovie(mMovie));
+        protected List<Review> doInBackground(Void... params) {
+            if (!ConnectivityUtils.isOnline(getContext())) {
+                return null;
+            } else {
+                return Webservice.load(TMDbApi.getReviewsForMovie(mMovie));
+            }
         }
 
         @Override
-        protected void onPostExecute(Review[] reviews) {
-            Log.d(LOG_TAG, "Fetched reviews count: " + reviews.length);
-            if (reviews.length > 0) {
-                Log.d(LOG_TAG, "Sample review: " + reviews[0]);
-            }
+        protected void onPostExecute(List<Review> reviews) {
+            mReviews = reviews;
+            updateReviews();
         }
     }
 
-    private class TrailersFetchTask extends AsyncTask<Void, Void, YouTubeTrailer[]> {
+    private void updateReviews() {
+        if (mReviews == null || mReviews.size() == 0) {
+            mContentTextView.setText(R.string.no_reviews_message);
+            mAuthorTextView.setVisibility(View.INVISIBLE);
+            mShowMoreButton.setVisibility(View.INVISIBLE);
+        } else {
+            mAuthorTextView.setVisibility(View.VISIBLE);
+            mShowMoreButton.setVisibility(View.VISIBLE);
+
+            Review review = mReviews.get(0);
+            mContentTextView.setText(review.getContent());
+            mAuthorTextView.setText(review.getAuthor());
+        }
+    }
+
+    private class TrailersFetchTask extends AsyncTask<Void, Void, List<YouTubeTrailer>> {
         @Override
-        protected YouTubeTrailer[] doInBackground(Void... params) {
-            return Webservice.load(TMDbApi.getVideosForMovie(mMovie));
+        protected List<YouTubeTrailer> doInBackground(Void... params) {
+            if (!ConnectivityUtils.isOnline(getContext())) {
+                return null;
+            } else {
+                return Webservice.load(TMDbApi.getVideosForMovie(mMovie));
+            }
         }
 
         @Override
-        protected void onPostExecute(YouTubeTrailer[] youTubeTrailers) {
-            Log.d(LOG_TAG, "Fetched trailers count: " + youTubeTrailers.length);
-            if (youTubeTrailers.length > 0) {
-                Log.d(LOG_TAG, "Sample trailer: " + youTubeTrailers[0]);
+        protected void onPostExecute(List<YouTubeTrailer> youTubeTrailers) {
+            if (youTubeTrailers == null) return;
+            Log.d(LOG_TAG, "Fetched trailers count: " + youTubeTrailers.size());
+            if (youTubeTrailers.size() > 0) {
+                Log.d(LOG_TAG, "Sample trailer: " + youTubeTrailers.get(0));
             }
         }
     }

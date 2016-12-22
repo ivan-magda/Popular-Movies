@@ -1,5 +1,7 @@
 package com.ivanmagda.popularmovies.utilities.json;
 
+import android.text.TextUtils;
+
 import com.ivanmagda.popularmovies.data.model.YouTubeTrailer;
 
 import org.json.JSONArray;
@@ -26,7 +28,8 @@ public final class YouTubeTrailerJsonUtils {
     private YouTubeTrailerJsonUtils() {
     }
 
-    public static YouTubeTrailer[] buildTrailersFromResponse(String response) {
+    public static List<YouTubeTrailer> buildTrailersFromResponse(String response) {
+        if (TextUtils.isEmpty(response)) return null;
         try {
             JSONObject json = new JSONObject(response);
             JSONArray videos = json.getJSONArray(RESULTS_RESPONSE_KEY);
@@ -37,8 +40,8 @@ public final class YouTubeTrailerJsonUtils {
         }
     }
 
-    public static YouTubeTrailer[] parseVideos(JSONArray jsonVideos) throws JSONException {
-        List<YouTubeTrailer> trailers = JsonUtils.parseJsonArray(
+    public static List<YouTubeTrailer> parseVideos(JSONArray jsonVideos) throws JSONException {
+        return JsonUtils.parseJsonArray(
                 jsonVideos,
                 new JsonUtils.Parcelable<YouTubeTrailer>() {
                     @Override
@@ -47,7 +50,6 @@ public final class YouTubeTrailerJsonUtils {
                     }
                 }
         );
-        return trailers.toArray(new YouTubeTrailer[trailers.size()]);
     }
 
     public static YouTubeTrailer parseVideo(JSONObject jsonObject) throws JSONException {

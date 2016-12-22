@@ -16,9 +16,28 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        style="@style/HeadlineTextView"
+        android:paddingTop="@dimen/default_padding"
+        android:text="@string/tv_overview_title" />
+
+    <TextView
         android:id="@+id/tv_detail_movie_overview"
         style="@style/JustifyTextView"
-        android:padding="@dimen/default_padding"
+        android:paddingLeft="@dimen/default_padding"
+        android:paddingRight="@dimen/default_padding"
+        android:paddingTop="4dp"
         android:textSize="18sp"
-        tools:text="Overview" />
+        tools:text="Overview content goes here" />
+
+    <TextView
+        style="@style/HeadlineTextView"
+        android:paddingBottom="4dp"
+        android:paddingTop="@dimen/default_padding"
+        android:text="@string/tv_reviews_title" />
+
+    <include
+        layout="@layout/review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

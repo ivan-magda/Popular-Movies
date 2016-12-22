@@ -24,6 +24,7 @@ package com.ivanmagda.popularmovies.view.fragment;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -31,6 +32,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +44,10 @@ import android.widget.Toast;
 
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.data.model.Movie;
+import com.ivanmagda.popularmovies.data.model.Review;
+import com.ivanmagda.popularmovies.data.model.YouTubeTrailer;
 import com.ivanmagda.popularmovies.network.TMDbApi;
+import com.ivanmagda.popularmovies.network.Webservice;
 import com.ivanmagda.popularmovies.persistence.MovieContract.MovieEntry;
 import com.ivanmagda.popularmovies.utilities.ImageUtils;
 import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
@@ -61,6 +66,8 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class MovieDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String LOG_TAG = MovieDetailFragment.class.getSimpleName();
 
     /**
      * Identifies a particular Loader being used in this component.
@@ -163,6 +170,9 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         });
 
         getLoaderManager().initLoader(MOVIE_LOADER, null, this);
+
+        new ReviewsFetchTask().execute();
+        new TrailersFetchTask().execute();
     }
 
     private void updateUI() {
@@ -241,6 +251,36 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    private class ReviewsFetchTask extends AsyncTask<Void, Void, Review[]> {
+        @Override
+        protected Review[] doInBackground(Void... params) {
+            return Webservice.load(TMDbApi.getReviewsForMovie(mMovie));
+        }
+
+        @Override
+        protected void onPostExecute(Review[] reviews) {
+            Log.d(LOG_TAG, "Fetched reviews count: " + reviews.length);
+            if (reviews.length > 0) {
+                Log.d(LOG_TAG, "Sample review: " + reviews[0]);
+            }
+        }
+    }
+
+    private class TrailersFetchTask extends AsyncTask<Void, Void, YouTubeTrailer[]> {
+        @Override
+        protected YouTubeTrailer[] doInBackground(Void... params) {
+            return Webservice.load(TMDbApi.getVideosForMovie(mMovie));
+        }
+
+        @Override
+        protected void onPostExecute(YouTubeTrailer[] youTubeTrailers) {
+            Log.d(LOG_TAG, "Fetched trailers count: " + youTubeTrailers.length);
+            if (youTubeTrailers.length > 0) {
+                Log.d(LOG_TAG, "Sample trailer: " + youTubeTrailers[0]);
+            }
+        }
     }
 
 }

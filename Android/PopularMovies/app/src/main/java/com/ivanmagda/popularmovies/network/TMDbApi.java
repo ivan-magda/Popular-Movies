@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2016 Ivan Magda
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,11 +23,16 @@
 package com.ivanmagda.popularmovies.network;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.ivanmagda.popularmovies.data.model.Movie;
-import com.ivanmagda.popularmovies.utilities.MovieJsonUtils;
+import com.ivanmagda.popularmovies.data.model.Review;
+import com.ivanmagda.popularmovies.data.model.YouTubeTrailer;
+import com.ivanmagda.popularmovies.utilities.json.MovieJsonUtils;
+import com.ivanmagda.popularmovies.utilities.json.ReviewsJsonUtils;
+import com.ivanmagda.popularmovies.utilities.json.YouTubeTrailerJsonUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -48,11 +53,11 @@ public final class TMDbApi {
     private static final String API_PATH = "3";
     private static final String IMAGE_API_PATH = "t/p";
     private static final String DEFAULT_POSTER_SIZE = "w185";
-    private static final String POPULAR_MOVIES_PATH = "movie/popular";
-    private static final String TOP_RATED_MOVIES_PATH = "movie/top_rated";
     public static final String API_KEY_PARAM = "api_key";
     public static final String LANGUAGE_PARAM = "language";
     public static final String PAGE_PARAM = "page";
+    private static final String POPULAR_MOVIES_PATH = "movie/popular";
+    private static final String TOP_RATED_MOVIES_PATH = "movie/top_rated";
 
     private TMDbApi() {
     }
@@ -84,6 +89,34 @@ public final class TMDbApi {
                     @Override
                     public Movie[] parse(String response) {
                         return MovieJsonUtils.buildMoviesFromResponse(response);
+                    }
+                }
+        );
+    }
+
+    public static Resource<YouTubeTrailer[]> getVideosForMovie(@NonNull final Movie movie) {
+        final String path = "movie/" + String.valueOf(movie.getId()) + "/videos";
+        URL url = buildUrl(path, getDefaultMethodParameters());
+        return new Resource<>(
+                url,
+                new Resource.Parse<YouTubeTrailer[]>() {
+                    @Override
+                    public YouTubeTrailer[] parse(String response) {
+                        return YouTubeTrailerJsonUtils.buildTrailersFromResponse(response);
+                    }
+                }
+        );
+    }
+
+    public static Resource<Review[]> getReviewsForMovie(@NonNull final Movie movie) {
+        final String path = "movie/" + String.valueOf(movie.getId()) + "/reviews";
+        URL url = buildUrl(path, getDefaultMethodParameters());
+        return new Resource<>(
+                url,
+                new Resource.Parse<Review[]>() {
+                    @Override
+                    public Review[] parse(String response) {
+                        return ReviewsJsonUtils.buildReviewsFromResponse(response);
                     }
                 }
         );

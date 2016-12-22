@@ -115,9 +115,6 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
         if (savedInstanceState != null) {
             mSortOrder = (SortOrder) savedInstanceState.getSerializable(SORT_ORDER_STATE_KEY);
         }
-
-        mFavoriteMoviesCallbacks = new FavoriteMoviesLoaderCallbacksAdapter(getContext(), this);
-        fetchMovies();
     }
 
     @Override
@@ -173,9 +170,10 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
         ButterKnife.bind(this, view);
         updateTitle();
 
+        mFavoriteMoviesCallbacks = new FavoriteMoviesLoaderCallbacksAdapter(getContext(), this);
         mFavoriteMoviesAdapter = new FavoriteMoviesAdapter(getContext(), null);
 
-        mMovieAdapter = new MovieAdapter(getActivity());
+        mMovieAdapter = new MovieAdapter(getContext());
         mGridView.setAdapter(mMovieAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -186,6 +184,8 @@ public class MoviesListFragment extends Fragment implements LoaderManager.Loader
                 showMovieDetails(movie);
             }
         });
+
+        fetchMovies();
     }
 
     private void showMovieDetails(Movie movie) {

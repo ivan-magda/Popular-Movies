@@ -20,13 +20,15 @@
  * THE SOFTWARE.
  */
 
-package com.ivanmagda.popularmovies.utilities;
+package com.ivanmagda.popularmovies.utilities.json;
 
 import com.ivanmagda.popularmovies.data.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Utility functions to handle TMDb movie JSON data.
@@ -58,37 +60,28 @@ public final class MovieJsonUtils {
         return null;
     }
 
-    public static Movie[] parseMovies(JSONArray jsonMovies) {
-        try {
-            Movie[] movies = new Movie[jsonMovies.length()];
-
-            for (int i = 0; i < jsonMovies.length(); i++) {
-                JSONObject jsonMovie = jsonMovies.getJSONObject(i);
-                movies[i] = parseMovie(jsonMovie);
-            }
-
-            return movies;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Movie[] parseMovies(JSONArray jsonMovies) throws JSONException {
+        List<Movie> movies = JsonUtils.parseJsonArray(
+                jsonMovies,
+                new JsonUtils.Parcelable<Movie>() {
+                    @Override
+                    public Movie parse(JSONObject jsonObject) throws JSONException {
+                        return MovieJsonUtils.parseMovie(jsonObject);
+                    }
+                }
+        );
+        return movies.toArray(new Movie[movies.size()]);
     }
 
-    public static Movie parseMovie(JSONObject jsonObject) {
-        try {
-            int id = jsonObject.getInt(ID_RESPONSE_KEY);
-            String posterPath = jsonObject.getString(POSTER_PATH_RESPONSE_KEY);
-            String overview = jsonObject.getString(OVERVIEW_RESPONSE_KEY);
-            String releaseDate = jsonObject.getString(RELEASE_DATE_RESPONSE_KEY);
-            String title = jsonObject.getString(TITLE_RESPONSE_KEY);
-            double rating = jsonObject.getDouble(RATING_RESPONSE_KEY);
+    public static Movie parseMovie(JSONObject jsonObject) throws JSONException {
+        int id = jsonObject.getInt(ID_RESPONSE_KEY);
+        String posterPath = jsonObject.getString(POSTER_PATH_RESPONSE_KEY);
+        String overview = jsonObject.getString(OVERVIEW_RESPONSE_KEY);
+        String releaseDate = jsonObject.getString(RELEASE_DATE_RESPONSE_KEY);
+        String title = jsonObject.getString(TITLE_RESPONSE_KEY);
+        double rating = jsonObject.getDouble(RATING_RESPONSE_KEY);
 
-            return new Movie(id, posterPath, overview, releaseDate, title, rating, null);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return new Movie(id, posterPath, overview, releaseDate, title, rating, null);
     }
 
 }

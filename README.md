@@ -24,7 +24,3 @@ This application help users discover popular and recent movies using [TMDb API](
 
 <img src="https://github.com/vanyaland/Popular-Movies/blob/master/res/Android-top-rated-movies.png">
 <img src="https://github.com/vanyaland/Popular-Movies/blob/master/res/Android-movie-detail.png">
-
-
-<img src="https://github.com/vanyaland/Popular-Movies/blob/master/res/Android-reviews.png">
-<img src="https://github.com/vanyaland/Popular-Movies/blob/master/res/Android-trailers.png">

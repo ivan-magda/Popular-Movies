@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.ivanmagda.popularmovies.network;
+package com.ivanmagda.popularmovies.network.tmdb;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -30,6 +30,7 @@ import android.util.Log;
 import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.data.model.Review;
 import com.ivanmagda.popularmovies.data.model.YouTubeTrailer;
+import com.ivanmagda.popularmovies.network.Resource;
 import com.ivanmagda.popularmovies.utilities.json.MovieJsonUtils;
 import com.ivanmagda.popularmovies.utilities.json.ReviewsJsonUtils;
 import com.ivanmagda.popularmovies.utilities.json.YouTubeTrailerJsonUtils;

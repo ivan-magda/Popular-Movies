@@ -32,7 +32,7 @@ import android.widget.ImageView;
 
 import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.data.model.Movie;
-import com.ivanmagda.popularmovies.network.TMDbApi;
+import com.ivanmagda.popularmovies.network.tmdb.TMDbApi;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;

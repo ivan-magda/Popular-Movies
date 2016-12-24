@@ -25,7 +25,6 @@ package com.ivanmagda.popularmovies.view.fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -51,8 +50,9 @@ import com.ivanmagda.popularmovies.R;
 import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.data.model.Review;
 import com.ivanmagda.popularmovies.data.model.YouTubeTrailer;
-import com.ivanmagda.popularmovies.network.TMDbApi;
-import com.ivanmagda.popularmovies.network.Webservice;
+import com.ivanmagda.popularmovies.network.tmdb.ReviewsFetchTask;
+import com.ivanmagda.popularmovies.network.tmdb.TMDbApi;
+import com.ivanmagda.popularmovies.network.tmdb.TrailersFetchTask;
 import com.ivanmagda.popularmovies.persistence.MovieContract.MovieEntry;
 import com.ivanmagda.popularmovies.utilities.ConnectivityUtils;
 import com.ivanmagda.popularmovies.utilities.ImageUtils;
@@ -221,8 +221,20 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             updateReviews();
             updateTrailers();
         } else {
-            new ReviewsFetchTask().execute();
-            new TrailersFetchTask().execute();
+            ReviewsFetchTask.load(mMovie, new ReviewsFetchTask.CompletionHandler() {
+                @Override
+                public void block(List<Review> reviews) {
+                    mReviews = reviews;
+                    updateReviews();
+                }
+            });
+            TrailersFetchTask.load(mMovie, new TrailersFetchTask.CompletionHandler() {
+                @Override
+                public void block(List<YouTubeTrailer> trailers) {
+                    mTrailers = trailers;
+                    updateTrailers();
+                }
+            });
         }
 
         mFavoriteButton.setOnClickListener(this);
@@ -348,29 +360,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-    /**
-     * Fetch movie additional info:
-     * 1) Reviews.
-     * 2) Trailers.
-     */
-
-    private class ReviewsFetchTask extends AsyncTask<Void, Void, List<Review>> {
-        @Override
-        protected List<Review> doInBackground(Void... params) {
-            if (!ConnectivityUtils.isOnline(getContext())) {
-                return null;
-            } else {
-                return Webservice.load(TMDbApi.getReviewsForMovie(mMovie));
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<Review> reviews) {
-            mReviews = reviews;
-            updateReviews();
-        }
-    }
-
     private void updateReviews() {
         if (mReviews == null || mReviews.size() == 0) {
             mContentTextView.setText(R.string.no_reviews_message);
@@ -383,23 +372,6 @@ public class MovieDetailFragment extends Fragment implements LoaderManager.Loade
             Review review = mReviews.get(0);
             mContentTextView.setText(review.getContent());
             mAuthorTextView.setText(review.getAuthor());
-        }
-    }
-
-    private class TrailersFetchTask extends AsyncTask<Void, Void, List<YouTubeTrailer>> {
-        @Override
-        protected List<YouTubeTrailer> doInBackground(Void... params) {
-            if (!ConnectivityUtils.isOnline(getContext())) {
-                return null;
-            } else {
-                return Webservice.load(TMDbApi.getVideosForMovie(mMovie));
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<YouTubeTrailer> youTubeTrailers) {
-            mTrailers = youTubeTrailers;
-            updateTrailers();
         }
     }
 

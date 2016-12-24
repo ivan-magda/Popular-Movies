@@ -48,7 +48,7 @@ import com.ivanmagda.popularmovies.data.MovieAdapter;
 import com.ivanmagda.popularmovies.data.model.Movie;
 import com.ivanmagda.popularmovies.network.MoviesLoader;
 import com.ivanmagda.popularmovies.network.Resource;
-import com.ivanmagda.popularmovies.network.TMDbApi;
+import com.ivanmagda.popularmovies.network.tmdb.TMDbApi;
 import com.ivanmagda.popularmovies.utilities.ConnectivityUtils;
 import com.ivanmagda.popularmovies.utilities.MoviePersistenceUtils;
 import com.ivanmagda.popularmovies.view.activity.MovieDetailActivity;

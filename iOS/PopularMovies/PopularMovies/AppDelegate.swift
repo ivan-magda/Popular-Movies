@@ -22,60 +22,69 @@
 
 import UIKit
 import Network
+import RealmSwift
 
 // MARK: AppDelegate: UIResponder, UIApplicationDelegate
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    // MARK: Properties
+  
+  // MARK: Properties
+  
+  var window: UIWindow?
+  
+  var tmdbWebservice: TMDbWebservice!
+  var movieRealmManager = MovieRealmManager()
+  
+  
+  // MARK: UIApplicationDelegate
+  
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    assert(TMDbConstants.TMDBParameterValues.apiKey != "REPLACE_WITH_YOUR_OWN_API_KEY",
+           "Replace TMDb API key with your own in TMDbConstants.swift")
+    configure()
+    return true
+  }
+  
+  // MARK: Private
+  
+  private func configure() {
+    tmdbWebservice = TMDbWebservice(webservice: Webservice(), config: TMDbConfig())
+    updateConfig()
     
-    var window: UIWindow?
-    var tmdbWebservice: TMDbWebservice!
+    let nc = window!.rootViewController as! UINavigationController
+    let moviesVC = nc.viewControllers.first as! MoviesListViewController
     
-    // MARK: UIApplicationDelegate
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        assert(TMDbConstants.TMDBParameterValues.apiKey != "REPLACE_WITH_YOUR_OWN_API_KEY",
-               "Replace TMDb API key with your own in TMDbConstants.swift")
-        configure()
-        return true
-    }
+    moviesVC.tmdbWebService = tmdbWebservice
+    moviesVC.movieRealmManager = movieRealmManager
     
-    // MARK: Private
-    
-    private func configure() {
-        tmdbWebservice = TMDbWebservice(webservice: CachedWebservice(), config: TMDbConfig())
-        updateConfig()
-        
-        let nc = window!.rootViewController as! UINavigationController
-        let moviesVC = nc.viewControllers.first as! MoviesListViewController
-        
-        moviesVC.tmdbWebService = tmdbWebservice
-        
-        UINavigationBar.appearance().barStyle = UIBarStyle.black
-        UINavigationBar.appearance().tintColor = .white
-    }
-
+    themeApp()
+  }
+  
+  private func themeApp() {
+    UINavigationBar.appearance().barStyle = UIBarStyle.black
+    UINavigationBar.appearance().tintColor = .white
+  }
+  
 }
 
 // MARK: - TMDb Helper Functions -
 
 extension AppDelegate {
-    
-    fileprivate func updateConfig() {
-        if let unarchived = TMDbConfig.unarchivedInstance() {
-            updateWith(new: unarchived)
-        }
-        
-       tmdbWebservice.config.fetchNewIfDaysSinceUpdateExceeds(7) { [unowned self] config in
-            guard let newConfig = config else { return }
-            self.updateWith(new: newConfig)
-        }
+  
+  fileprivate func updateConfig() {
+    if let unarchived = TMDbConfig.unarchivedInstance() {
+      updateWith(new: unarchived)
     }
     
-    private func updateWith(new newConfig: TMDbConfig) {
-        tmdbWebservice.config = newConfig
+    tmdbWebservice.config.fetchNewIfDaysSinceUpdateExceeds(7) { [unowned self] config in
+      guard let config = config else { return }
+      self.updateWith(new: config)
     }
-    
+  }
+  
+  private func updateWith(new newConfig: TMDbConfig) {
+    tmdbWebservice.config = newConfig
+  }
+  
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Ivan Magda
+ * Copyright (c) 2017 Ivan Magda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,35 +21,37 @@
  */
 
 import Foundation
+import RealmSwift
 
-// MARK: MovieDateUtils
+// MARK: MovieRealmManager
 
-final class MovieDateUtils {
+/// Helper class, which would give us an Realm.
+final class MovieRealmManager {
   
-  // MARK: Formatters
-  
-  private static let dateFormatter: DateFormatter = {
-    var formatter = DateFormatter()
-    formatter.locale = Locale.current
-    formatter.dateFormat = "yyyy-MM-dd"
-    return formatter
-  }()
-  
-  // MARK: Init
-  
-  private init() {
+  func realm() -> Realm {
+    do {
+      return try Realm()
+    } catch {
+      fatalError("Failed to instantiate an Realm object with error: \(error.localizedDescription)")
+    }
   }
   
-  // MARK: Date Format
-  
-  static func date(from dateString: String) -> Date? {
-    return dateFormatter.date(from: dateString)
-  }
-  
-  static func year(from movie: Movie) -> Int {
-    let date = dateFormatter.date(from: movie.releaseDateString)!
-    let calendar = Calendar.current
-    return calendar.component(.year, from: date)
+  func collections() -> MovieCollections {
+    let realm = self.realm()
+    let collectionsResult = realm.objects(MovieCollections.self)
+    if let anCollection = collectionsResult.first {
+      return anCollection
+    }
+    
+    do {
+      try realm.write {
+        realm.create(MovieCollections.self)
+      }
+    } catch {
+      fatalError("Failed to create an instance of \(MovieCollections.self) class with error: \(error.localizedDescription)")
+    }
+    
+    return realm.objects(MovieCollections.self).first!
   }
   
 }

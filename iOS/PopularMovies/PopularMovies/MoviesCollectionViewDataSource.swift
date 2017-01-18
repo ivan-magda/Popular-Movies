@@ -26,76 +26,76 @@ import AlamofireImage
 // MARK: MoviesCollectionViewDataSource: NSObject
 
 final class MoviesCollectionViewDataSource: NSObject {
+  
+  var movies: [Movie]?
+  var didSelect: ((Movie) -> ())? = { _ in }
+  
+  fileprivate var currentOrientation: UIDeviceOrientation!
+  
+  override init() {
+    super.init()
     
-    var movies: [Movie]?
-    var didSelect: ((Movie) -> ())? = { _ in }
+    let device = UIDevice.current
+    device.beginGeneratingDeviceOrientationNotifications()
     
-    fileprivate var currentOrientation: UIDeviceOrientation!
-    
-    override init() {
-        super.init()
-        
-        let device = UIDevice.current
-        device.beginGeneratingDeviceOrientationNotifications()
-        
-        let nc = NotificationCenter.default
-        nc.addObserver(forName: NSNotification.Name("UIDeviceOrientationDidChangeNotification"),
-                       object: device, queue: nil, using: handleOrientationChange)
+    let nc = NotificationCenter.default
+    nc.addObserver(forName: NSNotification.Name("UIDeviceOrientationDidChangeNotification"),
+                   object: device, queue: nil, using: handleOrientationChange)
+  }
+  
+  convenience init(_ movies: [Movie]) {
+    self.init()
+    self.movies = movies
+  }
+  
+  deinit {
+    UIDevice.current.endGeneratingDeviceOrientationNotifications()
+    NotificationCenter.default.removeObserver(self)
+  }
+  
+  private func handleOrientationChange(_ notification: Notification) {
+    if let device = notification.object as? UIDevice {
+      currentOrientation = device.orientation
     }
-    
-    convenience init(_ movies: [Movie]) {
-        self.init()
-        self.movies = movies
-    }
-    
-    deinit {
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    private func handleOrientationChange(_ notification: Notification) {
-        if let device = notification.object as? UIDevice {
-            currentOrientation = device.orientation
-        }
-    }
+  }
 }
 
 // MARK: MoviesCollectionViewDataSource: UICollectionViewDataSource
 
 extension MoviesCollectionViewDataSource: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.reuseIdentifier,
-                                 for: indexPath) as! MovieCollectionViewCell
-        configure(cell: cell, atIndexPath: indexPath)
-        return cell
-    }
-    
-    private func configure(cell: MovieCollectionViewCell, atIndexPath indexPath: IndexPath) {
-        let viewModel = MovieCellViewModel(movie: movies![indexPath.row])
-        cell.configure(with: viewModel)
-    }
-    
+  
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return movies?.count ?? 0
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView
+      .dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.reuseIdentifier,
+                           for: indexPath) as! MovieCollectionViewCell
+    configure(cell: cell, atIndexPath: indexPath)
+    return cell
+  }
+  
+  private func configure(cell: MovieCollectionViewCell, atIndexPath indexPath: IndexPath) {
+    let viewModel = MovieCellViewModel(movie: movies![indexPath.row])
+    cell.configure(with: viewModel)
+  }
+  
 }
 
 // MARK: - MoviesCollectionViewDataSource: UICollectionViewDelegateFlowLayout -
 
 extension MoviesCollectionViewDataSource: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return MovieCellViewModel.sizeForItem(with: currentOrientation,
-                                              andRootViewSize: collectionView.bounds.size)
-    }
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return MovieCellViewModel.sizeForItem(with: currentOrientation,
+                                          andRootViewSize: collectionView.bounds.size)
+  }
 }
 
 // MARK: - MoviesCollectionViewDataSource: UICollectionViewDelegate -
 
 extension MoviesCollectionViewDataSource: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        didSelect?(movies![indexPath.row])
-    }
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    didSelect?(movies![indexPath.row])
+  }
 }

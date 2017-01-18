@@ -29,6 +29,9 @@
 		756418621DF69B0000013767 /* MovieDetailScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756418611DF69B0000013767 /* MovieDetailScrollView.swift */; };
 		756418641DF69D7E00013767 /* MovieDateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756418631DF69D7E00013767 /* MovieDateUtils.swift */; };
 		756418671DF6AB0E00013767 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756418661DF6AB0E00013767 /* Assets.xcassets */; };
+		757B82EB1E2F28BB00B87DB3 /* MovieRealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757B82EA1E2F28BB00B87DB3 /* MovieRealmManager.swift */; };
+		757B82F01E2F312400B87DB3 /* RealmInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757B82EF1E2F312400B87DB3 /* RealmInt.swift */; };
+		75F4E0A91E2F8FF700BFCD3E /* MovieCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F4E0A81E2F8FF700BFCD3E /* MovieCollections.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +115,9 @@
 		756418611DF69B0000013767 /* MovieDetailScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailScrollView.swift; sourceTree = "<group>"; };
 		756418631DF69D7E00013767 /* MovieDateUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDateUtils.swift; sourceTree = "<group>"; };
 		756418661DF6AB0E00013767 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		757B82EA1E2F28BB00B87DB3 /* MovieRealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieRealmManager.swift; sourceTree = "<group>"; };
+		757B82EF1E2F312400B87DB3 /* RealmInt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmInt.swift; sourceTree = "<group>"; };
+		75F4E0A81E2F8FF700BFCD3E /* MovieCollections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCollections.swift; sourceTree = "<group>"; };
 		9B03A19F0A06B6F5CA56AEA7 /* Pods_PopularMovies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopularMovies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -178,6 +184,7 @@
 			children = (
 				7500A1551DF57D5B00B17251 /* App */,
 				75244A931DF58708006A3496 /* API */,
+				757B82ED1E2F28BF00B87DB3 /* Managers */,
 				755A53571DF5AFE9007C54B7 /* Model */,
 				7500A1561DF57D6900B17251 /* View */,
 				7500A1571DF57D7300B17251 /* Controller */,
@@ -282,7 +289,7 @@
 		755A53571DF5AFE9007C54B7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				755A53551DF5AFE4007C54B7 /* Movie.swift */,
+				75F4E0A61E2F8FC400BFCD3E /* Realm */,
 				752168861DF6D29100B941A2 /* MovieCellViewModel.swift */,
 				7521688C1DF6D82000B941A2 /* MovieDetailViewModel.swift */,
 			);
@@ -295,6 +302,24 @@
 				756418631DF69D7E00013767 /* MovieDateUtils.swift */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		757B82ED1E2F28BF00B87DB3 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				757B82EA1E2F28BB00B87DB3 /* MovieRealmManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		75F4E0A61E2F8FC400BFCD3E /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				755A53551DF5AFE4007C54B7 /* Movie.swift */,
+				75F4E0A81E2F8FF700BFCD3E /* MovieCollections.swift */,
+				757B82EF1E2F312400B87DB3 /* RealmInt.swift */,
+			);
+			name = Realm;
 			sourceTree = "<group>";
 		};
 		D60F6E937B2DC5BE6EBADFCE /* Pods */ = {
@@ -524,8 +549,11 @@
 				755A53561DF5AFE4007C54B7 /* Movie.swift in Sources */,
 				756418621DF69B0000013767 /* MovieDetailScrollView.swift in Sources */,
 				756418641DF69D7E00013767 /* MovieDateUtils.swift in Sources */,
+				757B82F01E2F312400B87DB3 /* RealmInt.swift in Sources */,
 				75244A901DF582E5006A3496 /* TMDbConfig.swift in Sources */,
 				755A535B1DF5BD25007C54B7 /* MoviesCollectionViewDataSource.swift in Sources */,
+				757B82EB1E2F28BB00B87DB3 /* MovieRealmManager.swift in Sources */,
+				75F4E0A91E2F8FF700BFCD3E /* MovieCollections.swift in Sources */,
 				752168871DF6D29100B941A2 /* MovieCellViewModel.swift in Sources */,
 				755A53591DF5BC0C007C54B7 /* MovieCollectionViewCell.swift in Sources */,
 				7500A1281DF57CAE00B17251 /* AppDelegate.swift in Sources */,
@@ -691,7 +719,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5844EBA01E6BBABB185AFEC5 /* Pods-PopularMovies.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6UNHY8UY6E;
 				INFOPLIST_FILE = PopularMovies/Info.plist;
@@ -707,7 +734,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7233E9E9CB83BB079277D316 /* Pods-PopularMovies.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6UNHY8UY6E;
 				INFOPLIST_FILE = PopularMovies/Info.plist;

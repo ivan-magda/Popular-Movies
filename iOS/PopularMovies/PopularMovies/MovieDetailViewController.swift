@@ -25,29 +25,29 @@ import UIKit
 // MARK: MovieDetailViewController: UIViewController
 
 final class MovieDetailViewController: UIViewController {
+  
+  // MARK: IBOutlets
+  
+  @IBOutlet weak var contentView: MovieDetailScrollView!
+  
+  // MARK: Properties
+  
+  var movie: Movie!
+  
+  // MARK: View Lifecycle
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    configure()
+  }
+  
+  // MARK: Private
+  
+  private func configure() {
+    let viewModel = MovieDetailViewModel(movie)
+    contentView.configure(with: viewModel)
     
-    // MARK: IBOutlets
-    
-    @IBOutlet weak var contentView: MovieDetailScrollView!
-    
-    // MARK: Properties
-    
-    var movie: Movie!
-
-    // MARK: View Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configure()
-    }
-    
-    // MARK: Private
-    
-    private func configure() {
-        let viewModel = MovieDetailViewModel(movie)
-        contentView.configure(with: viewModel)
-        
-        view.backgroundColor = viewModel.backgroundColor
-    }
-
+    view.backgroundColor = viewModel.backgroundColor
+  }
+  
 }

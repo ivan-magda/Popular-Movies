@@ -25,89 +25,89 @@ import UIKit
 // MARK: MovieDetailViewModel
 
 struct MovieDetailViewModel {
-    fileprivate let movie: Movie
-    
-    init(_ movie: Movie) {
-        self.movie = movie
-    }
+  fileprivate let movie: Movie
+  
+  init(_ movie: Movie) {
+    self.movie = movie
+  }
 }
 
 extension MovieDetailViewModel {
-    
-    private static var ratingFormatter: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter
+  
+  private static var ratingFormatter: NumberFormatter {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    return formatter
+  }
+  
+  var titleText: String {
+    return movie.title.capitalized
+  }
+  
+  var ratingText: String {
+    let number = NSDecimalNumber(value: movie.rating)
+    guard let ratingString = MovieDetailViewModel.ratingFormatter.string(from: number) else {
+      return "Rating: (Undefined)"
     }
+    return "Rating: " + ratingString
+  }
+  
+  var overviewText: String {
+    return "Overview:\n\(movie.overview)"
+  }
+  
+  var overviewAttributedText: NSAttributedString {
+    let overview = NSMutableAttributedString()
     
-    var titleText: String {
-        return movie.title.capitalized
-    }
+    let title = NSMutableAttributedString(string: "Overview\n",
+                                          attributes: [NSForegroundColorAttributeName: primaryTextColor])
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.lineSpacing = 6
+    title.addAttribute(NSParagraphStyleAttributeName,
+                       value: paragraphStyle,
+                       range: NSMakeRange(0, title.length))
     
-    var ratingText: String {
-        let number = NSDecimalNumber(value: movie.rating)
-        guard let ratingString = MovieDetailViewModel.ratingFormatter.string(from: number) else {
-            return "Rating: (Undefined)"
-        }
-        return "Rating: " + ratingString
-    }
+    let text = NSAttributedString(string: movie.overview,
+                                  attributes: [NSForegroundColorAttributeName: primaryDarkTextColor])
+    overview.append(title)
+    overview.append(text)
     
-    var overviewText: String {
-        return "Overview:\n\(movie.overview)"
-    }
-    
-    var overviewAttributedText: NSAttributedString {
-        let overview = NSMutableAttributedString()
-        
-        let title = NSMutableAttributedString(string: "Overview\n",
-                                              attributes: [NSForegroundColorAttributeName: primaryTextColor])
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        title.addAttribute(NSParagraphStyleAttributeName,
-                           value: paragraphStyle,
-                           range: NSMakeRange(0, title.length))
-        
-        let text = NSAttributedString(string: movie.overview,
-                                      attributes: [NSForegroundColorAttributeName: primaryDarkTextColor])
-        overview.append(title)
-        overview.append(text)
-        
-        return overview.copy() as! NSAttributedString
-    }
-    
-    var releaseDateText: String {
-        let releaseYear = MovieDateUtils.year(from: movie)
-        return "Year: \(releaseYear)"
-    }
-    
+    return overview.copy() as! NSAttributedString
+  }
+  
+  var releaseDateText: String {
+    let releaseYear = MovieDateUtils.year(from: movie)
+    return "Year: \(releaseYear)"
+  }
+  
 }
 
 // MARK: Colors
 
 extension MovieDetailViewModel {
-    
-    var backgroundColor: UIColor {
-        return .black
-    }
-    
-    var primaryTextColor: UIColor {
-        return .white
-    }
-    
-    var primaryDarkTextColor: UIColor {
-        return .darkGray
-    }
-    
-    var secondaryTextColor: UIColor {
-        return .lightText
-    }
-    
+  
+  var backgroundColor: UIColor {
+    return .black
+  }
+  
+  var primaryTextColor: UIColor {
+    return .white
+  }
+  
+  var primaryDarkTextColor: UIColor {
+    return .darkGray
+  }
+  
+  var secondaryTextColor: UIColor {
+    return .lightText
+  }
+  
 }
 
 // MARK: MovieDetailViewModel: ImagePresentable
 
 extension MovieDetailViewModel: ImagePresentable {
-    var imageUrl: URL {
-        return TMDbWebservice.buildImageUrlFor(movie)
-    }
+  var imageUrl: URL {
+    return TMDbWebservice.buildImageUrlFor(movie)
+  }
 }

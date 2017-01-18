@@ -1,8 +1,9 @@
-source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
-use_frameworks!
-inhibit_all_warnings!
 
 target 'PopularMovies' do
+  use_frameworks!
+  inhibit_all_warnings!
+
   pod 'AlamofireImage', '3.2.0'
+  pod 'RealmSwift', '2.2'
 end

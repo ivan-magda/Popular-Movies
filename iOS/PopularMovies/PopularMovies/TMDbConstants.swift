@@ -25,47 +25,47 @@ import Foundation
 // MARK: TMDbConstants
 
 struct TMDbConstants {
-    
-    // MARK: - TMDB -
-    
-    struct TMDB {
-        static let apiScheme = "https"
-        static let apiHost = "api.themoviedb.org"
-        static let apiPath = "/3"
-    }
-    
-    // MARK: - TMDB Parameter Keys -
-    
-    struct TMDBParameterKeys {
-        static let apiKey = "api_key"
-        static let requestToken = "request_token"
-        static let sessionId = "session_id"
-        static let username = "username"
-        static let password = "password"
-        static let page = "page"
-        static let language = "language"
-    }
-    
-    // MARK: - TMDB Parameter Values -
-    
-    struct TMDBParameterValues {
-        static let apiKey = "REPLACE_WITH_YOUR_OWN_API_KEY"
-        static let languageUS = "en-US"
-    }
-    
-    // MARK: - TMDB Response Keys -
-    
-    struct TMDBResponseKeys {
-        static let title = "title"
-        static let id = "id"
-        static let posterPath = "poster_path"
-        static let statusCode = "status_code"
-        static let statusMessage = "status_message"
-        static let sessionId = "session_id"
-        static let userId = "id"
-        static let requestToken = "request_token"
-        static let success = "success"
-        static let results = "results"
-    }
-    
+  
+  // MARK: - TMDB -
+  
+  struct TMDB {
+    static let apiScheme = "https"
+    static let apiHost = "api.themoviedb.org"
+    static let apiPath = "/3"
+  }
+  
+  // MARK: - TMDB Parameter Keys -
+  
+  struct TMDBParameterKeys {
+    static let apiKey = "api_key"
+    static let requestToken = "request_token"
+    static let sessionId = "session_id"
+    static let username = "username"
+    static let password = "password"
+    static let page = "page"
+    static let language = "language"
+  }
+  
+  // MARK: - TMDB Parameter Values -
+  
+  struct TMDBParameterValues {
+    static let apiKey = "REPLACE_WITH_YOUR_OWN_API_KEY"
+    static let languageUS = "en-US"
+  }
+  
+  // MARK: - TMDB Response Keys -
+  
+  struct TMDBResponseKeys {
+    static let title = "title"
+    static let id = "id"
+    static let posterPath = "poster_path"
+    static let statusCode = "status_code"
+    static let statusMessage = "status_message"
+    static let sessionId = "session_id"
+    static let userId = "id"
+    static let requestToken = "request_token"
+    static let success = "success"
+    static let results = "results"
+  }
+  
 }

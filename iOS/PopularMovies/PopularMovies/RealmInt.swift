@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Ivan Magda
+ * Copyright (c) 2017 Ivan Magda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,35 +21,8 @@
  */
 
 import Foundation
+import RealmSwift
 
-// MARK: MovieDateUtils
-
-final class MovieDateUtils {
-  
-  // MARK: Formatters
-  
-  private static let dateFormatter: DateFormatter = {
-    var formatter = DateFormatter()
-    formatter.locale = Locale.current
-    formatter.dateFormat = "yyyy-MM-dd"
-    return formatter
-  }()
-  
-  // MARK: Init
-  
-  private init() {
-  }
-  
-  // MARK: Date Format
-  
-  static func date(from dateString: String) -> Date? {
-    return dateFormatter.date(from: dateString)
-  }
-  
-  static func year(from movie: Movie) -> Int {
-    let date = dateFormatter.date(from: movie.releaseDateString)!
-    let calendar = Calendar.current
-    return calendar.component(.year, from: date)
-  }
-  
+final class RealmInt: Object {
+  dynamic var value = 0
 }

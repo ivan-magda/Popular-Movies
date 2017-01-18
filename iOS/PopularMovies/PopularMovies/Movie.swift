@@ -21,35 +21,64 @@
  */
 
 import Foundation
+import RealmSwift
 
-struct Movie {
-    let id: Int
-    let posterPath: String
-    let overview: String
-    let releaseDateString: String
-    let genreIds: [Int]
-    let title: String
-    let isHasVideo: Bool
-    let rating: Double
+final class Movie: Object {
+  
+  dynamic var id = 0
+  dynamic var posterPath = ""
+  dynamic var overview = ""
+  dynamic var releaseDateString = ""
+  dynamic var title = ""
+  dynamic var isHasVideo = false
+  dynamic var rating: Double = 0.0
+  
+  var genreIds: [Int] {
+    get {
+      return _genreIds.map { $0.value }
+    }
+    set {
+      _genreIds.removeAll()
+      _genreIds.append(contentsOf: newValue.map { RealmInt(value: [$0]) })
+    }
+  }
+  private var _genreIds = List<RealmInt>()
+  
+  override class func primaryKey() -> String? {
+    return "id"
+  }
+  
+  override class func indexedProperties() -> [String] {
+    return ["id"]
+  }
+  
+  override static func ignoredProperties() -> [String] {
+    return ["genreIds"]
+  }
+  
 }
 
 extension Movie {
-    init?(_ json: [String: Any]) {
-        guard let id = json["id"] as? Int,
-            let posterPath = json["poster_path"] as? String,
-            let overview = json["overview"] as? String,
-            let releaseDateString = json["release_date"] as? String,
-            let genreIds = json["genre_ids"] as? [Int],
-            let title = json["original_title"] as? String,
-            let hasVideo = json["video"] as? Bool,
-            let rating = json["vote_average"] as? Double else { return nil }
-        self.id = id
-        self.posterPath = posterPath
-        self.overview = overview
-        self.releaseDateString = releaseDateString
-        self.genreIds = genreIds
-        self.title = title
-        self.isHasVideo = hasVideo
-        self.rating = rating
+  convenience init?(_ json: [String: Any]) {
+    guard let id = json["id"] as? Int,
+      let posterPath = json["poster_path"] as? String,
+      let overview = json["overview"] as? String,
+      let releaseDateString = json["release_date"] as? String,
+      let genreIds = json["genre_ids"] as? [Int],
+      let title = json["original_title"] as? String,
+      let hasVideo = json["video"] as? Bool,
+      let rating = json["vote_average"] as? Double else {
+        return nil
     }
+    self.init()
+    
+    self.id = id
+    self.posterPath = posterPath
+    self.overview = overview
+    self.releaseDateString = releaseDateString
+    self.genreIds = genreIds
+    self.title = title
+    self.isHasVideo = hasVideo
+    self.rating = rating
+  }
 }

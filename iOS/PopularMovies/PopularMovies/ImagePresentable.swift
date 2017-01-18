@@ -23,5 +23,5 @@
 import Foundation
 
 protocol ImagePresentable {
-    var imageUrl: URL { get }
+  var imageUrl: URL { get }
 }

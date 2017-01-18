@@ -30,27 +30,27 @@ private let portraitHeightScaleFactor:  CGFloat = 2.5
 // MARK: MovieCellViewModel
 
 struct MovieCellViewModel {
-    let movie: Movie
+  let movie: Movie
 }
 
 // MARK: MovieCellViewModel: ImagePresentable
 
 extension MovieCellViewModel: ImagePresentable {
-    var imageUrl: URL {
-        return TMDbWebservice.buildImageUrlFor(movie)
-    }
+  var imageUrl: URL {
+    return TMDbWebservice.buildImageUrlFor(movie)
+  }
 }
 
 // MARK: Static
 
 extension MovieCellViewModel {
-    static func sizeForItem(with orientation: UIDeviceOrientation, andRootViewSize size: CGSize) -> CGSize {
-        if orientation.isLandscape {
-            return CGSize(width: size.width / landscapeWidthScaleFactor,
-                          height: size.height / landscapeHeightScaleFactor)
-        } else {
-            return CGSize(width: size.width / portraitWidthScaleFactor,
-                          height: size.height / portraitHeightScaleFactor)
-        }
+  static func sizeForItem(with orientation: UIDeviceOrientation, andRootViewSize size: CGSize) -> CGSize {
+    if orientation.isLandscape {
+      return CGSize(width: size.width / landscapeWidthScaleFactor,
+                    height: size.height / landscapeHeightScaleFactor)
+    } else {
+      return CGSize(width: size.width / portraitWidthScaleFactor,
+                    height: size.height / portraitHeightScaleFactor)
     }
+  }
 }

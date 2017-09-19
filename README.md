@@ -1,5 +1,7 @@
 # PopularMovies
 
+[![codebeat badge](https://codebeat.co/badges/3311300e-7131-4915-957b-d77f7a87b884)](https://codebeat.co/projects/github-com-vanyaland-popular-movies-master)
+
 ## Description
 This application help users discover popular and recent movies using [TMDb API](https://www.themoviedb.org/documentation/api).
 
